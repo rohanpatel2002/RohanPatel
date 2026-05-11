@@ -190,8 +190,8 @@ function Index() {
             <div className="md:col-span-7">
               <Reveal delay={0.2}>
                 <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  I'm fascinated by building systems that behave well under load, intent, and time.
-                  Whether it's a deployment gate that catches bad pushes, a semantic document engine,
+                      I'm fascinated by building systems that behave well under load, intent, and time. 
+                    Whether it's a deployment gate that catches bad pushes, a semantic document engine, 
                   or an AI code reviewer — I care about the parts most people skip: the data model,
                   the failure modes, and the shape of the API. Currently building at Praalak Tech Solutions
                   and interning as a Research Software Engineer at the Physical Research Laboratory.
