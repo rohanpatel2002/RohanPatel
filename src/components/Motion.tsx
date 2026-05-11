@@ -1,4 +1,4 @@
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef, type ReactNode } from "react";
 
 export function Reveal({ children, delay = 0, y = 40 }: { children: ReactNode; delay?: number; y?: number }) {
@@ -64,5 +64,21 @@ export function Parallax({ children, offset = 80 }: { children: ReactNode; offse
     <motion.div ref={ref} style={{ y }}>
       {children}
     </motion.div>
+  );
+}
+
+export function PageTransition({ children, routeKey }: { children: ReactNode; routeKey: string }) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={routeKey}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -16 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }
