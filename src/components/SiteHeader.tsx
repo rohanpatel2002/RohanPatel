@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 const links: { label: string; to: string; hash?: string }[] = [
-  { label: "Projects", to: "/", hash: "projects" },
-  { label: "Services", to: "/", hash: "services" },
-  { label: "About", to: "/", hash: "about" },
+  { label: "Projects", to: "/projects" },
+  { label: "Services", to: "/services" },
+  { label: "About", to: "/about" },
   { label: "Blog", to: "/blog" },
 ];
 
