@@ -8,6 +8,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 import appCss from "../styles.css?url";
@@ -82,11 +83,15 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {!loaded && <Loader onComplete={handleLoaderComplete} />}
-      <div style={{ visibility: loaded ? "visible" : "hidden" }}>
+      <motion.div
+        animate={{ opacity: loaded ? 1 : 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{ pointerEvents: loaded ? "auto" : "none" }}
+      >
         <PageTransition routeKey={currentPath}>
           <Outlet />
         </PageTransition>
-      </div>
+      </motion.div>
     </QueryClientProvider>
   );
 }

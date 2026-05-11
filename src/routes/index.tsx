@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Reveal, WordReveal, Marquee, Parallax } from "@/components/Motion";
@@ -34,9 +34,7 @@ function Hero() {
   const words = ["RESILIENT", "SCALABLE", "ROBUST", "ELEGANT"];
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % words.length);
-    }, 2500);
+    const timer = setInterval(() => setIndex((prev) => (prev + 1) % words.length), 2500);
     return () => clearInterval(timer);
   }, []);
 
@@ -45,18 +43,39 @@ function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-
   const buttonOpacity = useTransform(scrollYProgress, [0, 0.2, 0.5, 0.8], [0, 1, 1, 0]);
 
+  // 3D mouse tilt
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springCfg = { damping: 28, stiffness: 120 };
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), springCfg);
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [4, -4]), springCfg);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mouseX.set((e.clientX - r.left) / r.width - 0.5);
+    mouseY.set((e.clientY - r.top) / r.height - 0.5);
+  };
+  const handleMouseLeave = () => { mouseX.set(0); mouseY.set(0); };
+
   return (
-    <section ref={ref} className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-4 pt-24 sm:px-6">
-      {/* animated blobs */}
+    <section
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative flex min-h-[100svh] items-start justify-center overflow-hidden px-4 pt-6 sm:pt-8"
+      style={{ perspective: "1200px" }}
+    >
+      {/* Far background blob — stays behind everything */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-[10%] top-[20%] h-[40vw] w-[40vw] rounded-full bg-accent/30 blur-3xl" style={{ animation: "blob 22s ease-in-out infinite" }} />
         <div className="absolute right-[5%] bottom-[10%] h-[35vw] w-[35vw] rounded-full bg-primary/20 blur-3xl" style={{ animation: "blob 30s ease-in-out infinite reverse" }} />
       </div>
 
-      <motion.div style={{ y, opacity, scale }} className="relative z-10 text-center">
+      <motion.div
+        style={{ y, opacity, scale, rotateX, rotateY }}
+        className="relative z-10 text-center pb-24 sm:pb-32"
+      >
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -66,8 +85,23 @@ function Hero() {
           [ ROHAN PATEL — SOFTWARE ENGINEER ]
         </motion.p>
 
-        <h1 className="mt-6 font-display text-[15vw] leading-[0.9] sm:text-[14vw] md:text-[12vw]">
-          <span className="block overflow-hidden">
+        {/* H1 with internal depth layering */}
+        <h1 className="relative mt-6 font-display text-[15vw] leading-[0.9] sm:text-[14vw] md:text-[12vw]">
+
+          {/* Mid-ground blob — sits at z-10, between the word layers */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute rounded-full bg-accent/25 blur-[80px]"
+            style={{
+              left: "-15%", top: "10%",
+              width: "130%", height: "50%",
+              zIndex: 10,
+              animation: "blob 22s ease-in-out infinite",
+            }}
+          />
+
+          {/* I BUILD — z-20, in front of blob */}
+          <span className="relative block overflow-hidden" style={{ zIndex: 20 }}>
             <motion.span
               className="block"
               initial={{ y: "110%" }}
@@ -77,25 +111,25 @@ function Hero() {
               I BUILD
             </motion.span>
           </span>
-          <span className="relative block h-[0.9em] overflow-hidden">
+
+          {/* Animated word — z-5, BEHIND the blob (glow engulfs it) */}
+          <span className="relative block h-[0.9em] overflow-hidden" style={{ zIndex: 5 }}>
             <AnimatePresence mode="wait">
               <motion.span
                 key={words[index]}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "-100%" }}
-                transition={{ 
-                  duration: 0.6, 
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: index === 0 ? 0.45 : 0 // Slight delay only for the first word on mount
-                }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: index === 0 ? 0.45 : 0 }}
                 className="absolute inset-0 block text-accent"
               >
                 {words[index]}
               </motion.span>
             </AnimatePresence>
           </span>
-          <span className="block overflow-hidden">
+
+          {/* SOFTWARE — z-20, in front */}
+          <span className="relative block overflow-hidden" style={{ zIndex: 20 }}>
             <motion.span
               className="block"
               initial={{ y: "110%" }}
@@ -105,7 +139,9 @@ function Hero() {
               SOFTWARE
             </motion.span>
           </span>
-          <span className="block overflow-hidden">
+
+          {/* SYSTEMS. — z-20, in front */}
+          <span className="relative block overflow-hidden" style={{ zIndex: 20 }}>
             <motion.span
               className="block"
               initial={{ y: "110%" }}
@@ -117,25 +153,6 @@ function Hero() {
           </span>
         </h1>
 
-        <motion.p
-          style={{ opacity: buttonOpacity }}
-          className="mx-auto mt-10 max-w-xl text-base text-muted-foreground md:text-lg"
-        >
-          Full-stack & AI systems. Tools that are sharp, fast, and built to last.
-        </motion.p>
-
-        <motion.div
-          style={{ opacity: buttonOpacity }}
-          className="mt-10 flex justify-center gap-3"
-        >
-          <Link to="/" hash="projects" className="group relative overflow-hidden rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground">
-            <span className="relative z-10">View work →</span>
-            <span className="absolute inset-0 -translate-x-full bg-accent transition-transform duration-500 group-hover:translate-x-0" />
-          </Link>
-          <Link to="/blog" className="rounded-full border border-foreground/20 px-7 py-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent">
-            Read blog
-          </Link>
-        </motion.div>
       </motion.div>
 
       {/* scroll cue */}
@@ -152,6 +169,9 @@ function Hero() {
     </section>
   );
 }
+
+
+
 
 function Index() {
   return (
