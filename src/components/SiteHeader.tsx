@@ -19,7 +19,7 @@ export function SiteHeader() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="sticky top-3 z-50 mx-3 sm:top-4 sm:mx-6 md:mx-8"
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-border bg-card/80 px-4 py-2.5 shadow-sm backdrop-blur-md sm:px-5 sm:py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-border bg-card/80 px-4 py-1.5 shadow-sm backdrop-blur-md sm:px-5 sm:py-2">
         <Link to="/" onClick={() => setOpen(false)} className="font-display text-xl tracking-tight sm:text-2xl">
           ROHAN<span className="text-accent">.</span>
         </Link>

@@ -4,11 +4,15 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useState } from "react";
 
 import appCss from "../styles.css?url";
+import { Loader } from "@/components/Loader";
+import { PageTransition } from "@/components/Motion";
 
 function NotFoundComponent() {
   return (
@@ -67,9 +71,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Show loader only once per browser session
+  const [loaded, setLoaded] = useState(false);
+
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
+
+  const handleLoaderComplete = () => setLoaded(true);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      {!loaded && <Loader onComplete={handleLoaderComplete} />}
+      <div style={{ visibility: loaded ? "visible" : "hidden" }}>
+        <PageTransition routeKey={currentPath}>
+          <Outlet />
+        </PageTransition>
+      </div>
     </QueryClientProvider>
   );
 }
+
