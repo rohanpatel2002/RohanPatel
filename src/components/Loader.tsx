@@ -87,12 +87,16 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
     };
   }, []);
 
-  // Panel exit: top slides up, bottom slides down
+  // Panel exit: top slides up, bottom slides down with slight stagger
   const panel = {
     initial: { y: "0%" },
     exit: (dir: number) => ({
       y: `${dir * 105}%`,
-      transition: { duration: 0.85, ease: [0.76, 0, 0.24, 1] },
+      transition: {
+        duration: 1.1,
+        delay: dir === 1 ? 0.08 : 0, // bottom panel exits slightly after top
+        ease: [0.65, 0, 0.35, 1],
+      },
     }),
   };
 
