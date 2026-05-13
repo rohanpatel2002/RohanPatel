@@ -13,12 +13,8 @@ export const Route = createFileRoute("/blog")({
   component: Blog,
 });
 
-const posts = [
-  { slug: "deployment-gates", title: "Why Deployment Gates Should Read Incidents", date: "May 2026", tag: "Systems", excerpt: "Most CI gates check syntax. The interesting ones check intent — and the best ones learn from your past outages." },
-  { slug: "ai-reviewing-ai", title: "AI Reviewing AI: The Missing Layer", date: "Apr 2026", tag: "AI", excerpt: "When LLMs write your PRs, who reviews the context they couldn't see? A field report from building Tribunal." },
-  { slug: "pgvector-in-go", title: "Building Semantic Search in Go with pgvector", date: "Mar 2026", tag: "Backend", excerpt: "Notes from shipping Docentra — embedding pipelines, query design, and where Postgres genuinely shines." },
-  { slug: "hired-by-algorithm", title: "Hired by an Algorithm: Lessons from Writing the Book", date: "Feb 2026", tag: "Career", excerpt: "What modern hiring algorithms actually look at — and the small structural choices that move resumes through them." },
-];
+import { posts } from "@/lib/data";
+
 
 function Blog() {
   return (
@@ -46,7 +42,7 @@ function Blog() {
           {posts.map((p, i) => (
             <Reveal key={p.slug} delay={i * 0.08}>
               <motion.div whileHover={{ x: 8 }} transition={{ type: "spring", stiffness: 200, damping: 20 }}>
-                <Link to="/blog" className="group flex flex-col gap-3 py-6 sm:py-8 md:flex-row md:items-baseline md:justify-between">
+                <Link to="/blog/$slug" params={{ slug: p.slug }} className="group flex flex-col gap-3 py-6 sm:py-8 md:flex-row md:items-baseline md:justify-between">
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-muted-foreground sm:gap-3 sm:text-xs">
                       <span>{p.date}</span>·<span className="text-accent">{p.tag}</span>

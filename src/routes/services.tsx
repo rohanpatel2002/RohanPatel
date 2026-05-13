@@ -13,12 +13,8 @@ export const Route = createFileRoute("/services")({
   component: Services,
 });
 
-const services = [
-  { n: "01", title: "Full-Stack Systems", body: "End-to-end web applications built with React, TypeScript, Node, and Go — engineered for scale and clarity." },
-  { n: "02", title: "AI Integration", body: "LLMs, RAG, vector search, and LangChain in real products — with guardrails that actually hold." },
-  { n: "03", title: "Backend & APIs", body: "Django, REST, gRPC, PostgreSQL, MongoDB. Clean contracts, predictable performance, observable systems." },
-  { n: "04", title: "DevOps & CI/CD", body: "Pipelines, infrastructure, and deployment safety nets so teams ship faster without breaking things." },
-];
+import { services } from "@/lib/data";
+
 
 function Services() {
   return (

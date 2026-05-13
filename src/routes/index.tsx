@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
-import { Reveal, WordReveal, Marquee, Parallax } from "@/components/Motion";
+import { Reveal, WordReveal, Marquee, Parallax, Magnetic, ScrambleText } from "@/components/Motion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,26 +14,8 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const projects = [
-  { name: "IronClad", tag: "Deployment Safety · Go", blurb: "A deployment gate that evaluates deploy intent using live dependencies, incident history, and semantic risk scoring — preventing risky pushes before they ship.", meta: "Apache 2.0 · Go" },
-  { name: "Docentra", tag: "AI Document Assistant · Go", blurb: "AI-powered document assistant with semantic search using Go, pgvector, and fastembed for intelligent retrieval across private document libraries.", meta: "Open Source · Go · pgvector" },
-  { name: "Tribunal", tag: "AI Code Review · TypeScript", blurb: "The missing code review layer — AI that reviews what the AI wrote. Detects AI-generated code in PRs, analyzes context blindness, and briefs human reviewers.", meta: "MIT · TypeScript" },
-  { name: "Hired by an Algorithm", tag: "Book · 2025", blurb: "A self-published guide on perfecting your resume — covering achievements, experience, and the mechanics of modern algorithmic hiring.", meta: "Self-published · Jun 2025" },
-];
+import { projects, services, processSteps, stack } from "@/lib/data";
 
-const services = [
-  { n: "01", title: "Full-Stack Systems", body: "End-to-end web applications built with React, TypeScript, Node, and Go — engineered for scale and clarity." },
-  { n: "02", title: "AI Integration", body: "LLMs, RAG, vector search, and LangChain in real products — with guardrails that actually hold." },
-  { n: "03", title: "Backend & APIs", body: "Django, REST, gRPC, PostgreSQL, MongoDB. Clean contracts, predictable performance, observable systems." },
-  { n: "04", title: "DevOps & CI/CD", body: "Pipelines, infrastructure, and deployment safety nets so teams ship faster without breaking things." },
-];
-
-const process = [
-  { n: "01.", title: "DISCOVER", body: "Understand the problem, the users, and the constraints before writing a single line of code." },
-  { n: "02.", title: "DESIGN", body: "Map the architecture, data model, and edge cases. Decide what to build — and what not to." },
-  { n: "03.", title: "BUILD", body: "Ship in tight iterations with tests, types, and observability built in from day one." },
-  { n: "04.", title: "REFINE", body: "Measure, profile, harden. Polish the rough edges until the product feels inevitable." },
-];
 
 function Hero() {
   const [index, setIndex] = useState(0);
@@ -220,22 +202,24 @@ function Index() {
           <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-6 md:grid-cols-2">
             {projects.map((p, i) => (
               <Reveal key={p.name} delay={i * 0.1}>
-                <motion.article
-                  whileHover={{ y: -6 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
-                >
-                  <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <div className="relative">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
-                    <h3 className="mt-3 break-words font-display text-4xl sm:text-5xl md:text-6xl">{p.name}</h3>
-                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">{p.blurb}</p>
-                  </div>
-                  <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-border pt-5 text-xs sm:mt-8 sm:text-sm">
-                    <span className="text-muted-foreground">{p.meta}</span>
-                    <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
-                  </div>
-                </motion.article>
+                <Link to="/projects/$slug" params={{ slug: p.slug }}>
+                  <motion.article
+                    whileHover={{ y: -6 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
+                  >
+                    <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="relative">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
+                      <h3 className="mt-3 break-words font-display text-4xl sm:text-5xl md:text-6xl">{p.name}</h3>
+                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">{p.blurb}</p>
+                    </div>
+                    <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-border pt-5 text-xs sm:mt-8 sm:text-sm">
+                      <span className="text-muted-foreground">{p.meta}</span>
+                      <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
+                    </div>
+                  </motion.article>
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -271,7 +255,7 @@ function Index() {
           <Reveal><p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">[ PROCESS ]</p></Reveal>
           <WordReveal text="How I work." className="mt-4 font-display text-5xl sm:text-6xl md:text-8xl" />
           <div className="mt-10 grid gap-6 sm:mt-12 sm:gap-8 sm:grid-cols-2 md:grid-cols-4">
-            {process.map((p, i) => (
+            {processSteps.map((p, i) => (
               <Reveal key={p.n} delay={i * 0.1}>
                 <Parallax offset={20}>
                   <div className="border-t-2 border-foreground pt-5">
@@ -292,11 +276,7 @@ function Index() {
           <Reveal><p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">[ STACK ]</p></Reveal>
           <WordReveal text="Tools of trade." className="mt-4 font-display text-5xl sm:text-6xl md:text-8xl" />
           <div className="mt-8 flex flex-wrap gap-2 sm:mt-10 sm:gap-3">
-            {[
-              "TypeScript","React.js","Node.js","React Native","Python","Go","SQL","PostgreSQL",
-              "MongoDB","Django REST","Supabase","LangChain","RAG","Vector Databases",
-              "AI Integration","Systems Design","CI/CD","REST APIs","Postman","Git",
-            ].map((s, i) => (
+            {stack.map((s, i) => (
               <motion.span
                 key={s}
                 initial={{ opacity: 0, y: 10 }}
@@ -322,9 +302,9 @@ function Index() {
             <p className="relative text-xs font-semibold tracking-[0.3em] opacity-70">[ CONTACT ]</p>
             <h2 className="relative mt-4 font-display text-5xl sm:text-7xl md:text-9xl">Let's build<br />something<span className="text-accent">.</span></h2>
             <div className="relative mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
-              <a href="mailto:rohan@example.com" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground sm:px-7 sm:py-3 sm:text-base">Email me</a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">LinkedIn</a>
-              <Link to="/blog" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">Read the blog →</Link>
+              <Magnetic><a href="mailto:rohan@example.com" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground sm:px-7 sm:py-3 sm:text-base">Email me</a></Magnetic>
+              <Magnetic><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">LinkedIn</a></Magnetic>
+              <Magnetic><Link to="/blog" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">Read the blog →</Link></Magnetic>
             </div>
           </div>
         </Reveal>

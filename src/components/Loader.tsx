@@ -10,7 +10,6 @@ function randomTarget() {
   return TARGET[Math.floor(Math.random() * TARGET.length)];
 }
 
-// Shared text renderer used by both panels
 function GlitchText({
   displayed,
   locked,
@@ -19,26 +18,28 @@ function GlitchText({
   locked: boolean[];
 }) {
   return (
-    <div className="flex items-center gap-[0.01em]">
-      {displayed.map((ch, i) => (
-        <span
-          key={i}
-          className="inline-block font-display leading-none text-[18vw] sm:text-[13vw]"
-          style={{
-            fontFamily: "Anton, Impact, system-ui, sans-serif",
-            textTransform: "uppercase",
-            color:
-              i === TARGET.length - 1
-                ? "var(--accent)"
-                : locked[i]
-                ? "oklch(0.97 0.005 90)"
-                : "oklch(0.35 0.01 270)",
-            transition: "color 80ms",
-          }}
-        >
-          {ch}
-        </span>
-      ))}
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center gap-[0.01em]">
+        {displayed.map((ch, i) => (
+          <span
+            key={i}
+            className="inline-block font-display leading-none text-[18vw] sm:text-[13vw]"
+            style={{
+              fontFamily: "Anton, Impact, system-ui, sans-serif",
+              textTransform: "uppercase",
+              color:
+                i === TARGET.length - 1
+                  ? "var(--accent)"
+                  : locked[i]
+                  ? "oklch(0.97 0.005 90)"
+                  : "oklch(0.35 0.01 270)",
+              transition: "color 80ms",
+            }}
+          >
+            {ch}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -87,14 +88,13 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
     };
   }, []);
 
-  // Panel exit: top slides up, bottom slides down with slight stagger
   const panel = {
     initial: { y: "0%" },
     exit: (dir: number) => ({
       y: `${dir * 105}%`,
       transition: {
         duration: 1.1,
-        delay: dir === 1 ? 0.08 : 0, // bottom panel exits slightly after top
+        delay: dir === 1 ? 0.08 : 0,
         ease: [0.65, 0, 0.35, 1],
       },
     }),
@@ -103,8 +103,7 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
   return (
     <AnimatePresence onExitComplete={onComplete}>
       {!exit && (
-        <>
-          {/* TOP PANEL — clips top half of the centered text */}
+        <div className="fixed inset-0 z-[9999] bg-background pointer-events-none">
           <motion.div
             key="top"
             custom={-1}
@@ -114,8 +113,6 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
             className="fixed inset-x-0 top-0 z-[9999] overflow-hidden bg-[oklch(0.1_0.005_270)]"
             style={{ height: "50vh" }}
           >
-            {/* A full-viewport-height container anchored to the top of this panel,
-                so the text sits centered in the full screen — panel clips the top half */}
             <div
               className="absolute inset-x-0 flex items-center justify-center"
               style={{ top: 0, height: "100vh" }}
@@ -124,7 +121,6 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
             </div>
           </motion.div>
 
-          {/* BOTTOM PANEL — clips bottom half of the centered text */}
           <motion.div
             key="bottom"
             custom={1}
@@ -134,8 +130,6 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
             className="fixed inset-x-0 bottom-0 z-[9999] overflow-hidden bg-[oklch(0.1_0.005_270)]"
             style={{ height: "50vh" }}
           >
-            {/* Same container but offset upward by 50vh so the same centered
-                text aligns perfectly — panel clips the bottom half */}
             <div
               className="absolute inset-x-0 flex items-center justify-center"
               style={{ top: "-50vh", height: "100vh" }}
@@ -143,8 +137,12 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
               <GlitchText displayed={displayed} locked={locked} />
             </div>
           </motion.div>
-        </>
+          
+          <div className="fixed inset-0 z-[10000] pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmYiLz48L3N2Zz4=')] bg-[length:100%_4px]" />
+        </div>
       )}
     </AnimatePresence>
   );
 }
+
+

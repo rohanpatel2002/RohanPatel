@@ -1,5 +1,5 @@
-import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
-import { useRef, type ReactNode } from "react";
+import { motion, AnimatePresence, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useState, useEffect, type ReactNode } from "react";
 
 export function Reveal({ children, delay = 0, y = 40 }: { children: ReactNode; delay?: number; y?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -67,18 +67,101 @@ export function Parallax({ children, offset = 80 }: { children: ReactNode; offse
   );
 }
 
+export function Magnetic({ children, strength = 0.3 }: { children: ReactNode; strength?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 15 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    x.set((clientX - centerX) * strength);
+    y.set((clientY - centerY) * strength);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: springX, y: springY }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+export function ScrambleText({ text, className = "" }: { text: string; className?: string }) {
+  const [displayText, setDisplayText] = useState(text);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const scramble = () => {
+    let iteration = 0;
+    clearInterval(intervalRef.current!);
+    
+    intervalRef.current = setInterval(() => {
+      setDisplayText(prev => 
+        prev.split("").map((_, index) => {
+          if (index < iteration) return text[index];
+          return CHARS[Math.floor(Math.random() * CHARS.length)];
+        }).join("")
+      );
+
+      if (iteration >= text.length) clearInterval(intervalRef.current!);
+      iteration += 1 / 3;
+    }, 30);
+  };
+
+  return (
+    <span className={className} onMouseEnter={scramble}>
+      {displayText}
+    </span>
+  );
+}
+
 export function PageTransition({ children, routeKey }: { children: ReactNode; routeKey: string }) {
   return (
     <AnimatePresence mode="wait">
-      <motion.div
-        key={routeKey}
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -16 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
+      <motion.div key={routeKey} className="relative">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {children}
+        </motion.div>
+        
+        {/* Cinematic Curtain Effect */}
+        <motion.div
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 0 }}
+          exit={{ scaleY: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[100] origin-top bg-accent pointer-events-none"
+        />
+        <motion.div
+          initial={{ scaleY: 1 }}
+          animate={{ scaleY: 0 }}
+          exit={{ scaleY: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          className="fixed inset-0 z-[100] origin-bottom bg-accent pointer-events-none"
+        />
       </motion.div>
     </AnimatePresence>
   );
 }
+
+
