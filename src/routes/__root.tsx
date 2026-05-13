@@ -14,6 +14,8 @@ import { useState } from "react";
 import appCss from "../styles.css?url";
 import { Loader } from "@/components/Loader";
 import { PageTransition } from "@/components/Motion";
+import Lenis from "lenis";
+import { useEffect } from "react";
 
 function NotFoundComponent() {
   return (
@@ -77,6 +79,17 @@ function RootComponent() {
 
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+
+  useEffect(() => {
+    if (!loaded) return;
+    const lenis = new Lenis();
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    return () => lenis.destroy();
+  }, [loaded]);
 
   const handleLoaderComplete = () => setLoaded(true);
 

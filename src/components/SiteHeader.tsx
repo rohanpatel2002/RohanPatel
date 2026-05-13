@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useTheme } from "@/hooks/use-theme";
+import { Moon, Sun } from "lucide-react";
 
 const links: { label: string; to: string; hash?: string }[] = [
   { label: "Projects", to: "/projects" },
@@ -8,6 +10,19 @@ const links: { label: string; to: string; hash?: string }[] = [
   { label: "About", to: "/about" },
   { label: "Blog", to: "/blog" },
 ];
+
+export function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  return (
+    <button
+      onClick={toggleTheme}
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card transition-colors hover:bg-muted"
+      aria-label="Toggle theme"
+    >
+      {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+    </button>
+  );
+}
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -37,14 +52,15 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Link
             to="/"
             hash="contact"
             className="group relative hidden overflow-hidden rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground sm:inline-block sm:px-5 sm:text-sm"
           >
             <span className="relative z-10">CONTACT</span>
-            <span className="absolute inset-0 -translate-x-full bg-accent transition-transform duration-500 group-hover:translate-x-0" />
+            <span className="absolute inset-0 -translate-x-full bg-accent transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:translate-x-0" />
           </Link>
           <button
             aria-label="Menu"
