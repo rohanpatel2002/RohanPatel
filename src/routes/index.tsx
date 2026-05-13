@@ -5,6 +5,12 @@ import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Reveal, WordReveal, Marquee, Parallax } from "@/components/Motion";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Rohan Patel — Software Engineer & Full-Stack / AI Systems" },
+      { name: "description", content: "Portfolio of Rohan Patel — specializing in resilient full-stack systems and AI integration. Author of Hired by an Algorithm." },
+    ],
+  }),
   component: Index,
 });
 

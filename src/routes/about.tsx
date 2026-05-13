@@ -4,6 +4,12 @@ import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Reveal, WordReveal } from "@/components/Motion";
 
 export const Route = createFileRoute("/about")({
+  head: () => ({
+    meta: [
+      { title: "About — Rohan Patel" },
+      { name: "description", content: "Learn about Rohan Patel's approach to building resilient software systems and AI integration." },
+    ],
+  }),
   component: About,
 });
 

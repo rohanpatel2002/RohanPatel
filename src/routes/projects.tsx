@@ -4,6 +4,12 @@ import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Reveal, WordReveal } from "@/components/Motion";
 
 export const Route = createFileRoute("/projects")({
+  head: () => ({
+    meta: [
+      { title: "Projects — Rohan Patel" },
+      { name: "description", content: "Selected works by Rohan Patel, including IronClad, Docentra, and Tribunal." },
+    ],
+  }),
   component: Projects,
 });
 
