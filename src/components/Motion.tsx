@@ -131,7 +131,40 @@ export function ScrambleText({ text, className = "" }: { text: string; className
   );
 }
 
+export function Tilt({ children, intensity = 15 }: { children: ReactNode; intensity?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [intensity, -intensity]), { stiffness: 150, damping: 15 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-intensity, intensity]), { stiffness: 150, damping: 15 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    x.set((e.clientX - left) / width - 0.5);
+    y.set((e.clientY - top) / height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, perspective: 1000 }}
+      className="h-full w-full"
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export function PageTransition({ children, routeKey }: { children: ReactNode; routeKey: string }) {
+
   return (
     <AnimatePresence mode="wait">
       <motion.div key={routeKey} className="relative">

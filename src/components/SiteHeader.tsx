@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
+import { useContactModal } from "@/hooks/use-contact-modal";
 import { Moon, Sun } from "lucide-react";
 
 const links: { label: string; to: string; hash?: string }[] = [
@@ -26,6 +27,7 @@ export function ThemeToggle() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { open: openContact } = useContactModal();
 
   return (
     <motion.header
@@ -54,14 +56,13 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Link
-            to="/"
-            hash="contact"
+          <button
+            onClick={openContact}
             className="group relative hidden overflow-hidden rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground sm:inline-block sm:px-5 sm:text-sm"
           >
             <span className="relative z-10">CONTACT</span>
             <span className="absolute inset-0 -translate-x-full bg-accent transition-transform duration-500 ease-[0.22,1,0.36,1] group-hover:translate-x-0" />
-          </Link>
+          </button>
           <button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
@@ -96,14 +97,12 @@ export function SiteHeader() {
                   {l.label}
                 </Link>
               ))}
-              <Link
-                to="/"
-                hash="contact"
-                onClick={() => setOpen(false)}
-                className="mt-1 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground"
+              <button
+                onClick={() => { setOpen(false); openContact(); }}
+                className="mt-1 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground w-full"
               >
                 CONTACT
-              </Link>
+              </button>
             </nav>
           </motion.div>
         )}

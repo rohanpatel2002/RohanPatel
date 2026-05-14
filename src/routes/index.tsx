@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
-import { Reveal, WordReveal, Marquee, Parallax, Magnetic, ScrambleText } from "@/components/Motion";
+import { Reveal, WordReveal, Marquee, Parallax, Magnetic, ScrambleText, Tilt } from "@/components/Motion";
+import { useContactModal } from "@/hooks/use-contact-modal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -162,6 +163,7 @@ function Hero() {
 
 
 function Index() {
+  const { open } = useContactModal();
   return (
     <div className="grain min-h-screen bg-background">
       <SiteHeader />
@@ -203,11 +205,13 @@ function Index() {
             {projects.map((p, i) => (
               <Reveal key={p.name} delay={i * 0.1}>
                 <Link to="/projects/$slug" params={{ slug: p.slug }}>
-                  <motion.article
-                    whileHover={{ y: -6 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                    className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
-                  >
+                  <Tilt intensity={10}>
+                    <motion.article
+                      whileHover={{ y: -6 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
+                    >
+
                     <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                     <div className="relative">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
@@ -219,8 +223,9 @@ function Index() {
                       <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
                     </div>
                   </motion.article>
-                </Link>
-              </Reveal>
+                </Tilt>
+              </Link>
+            </Reveal>
             ))}
           </div>
         </div>
@@ -270,24 +275,74 @@ function Index() {
         </div>
       </section>
 
-      {/* STACK */}
+      {/* STACK (Bento Grid) */}
       <section className="px-4 pt-24 sm:px-6 sm:pt-32">
         <div className="mx-auto max-w-7xl">
           <Reveal><p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">[ STACK ]</p></Reveal>
           <WordReveal text="Tools of trade." className="mt-4 font-display text-5xl sm:text-6xl md:text-8xl" />
-          <div className="mt-8 flex flex-wrap gap-2 sm:mt-10 sm:gap-3">
-            {stack.map((s, i) => (
-              <motion.span
-                key={s}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.02, duration: 0.4 }}
-                whileHover={{ scale: 1.08, backgroundColor: "var(--accent)", color: "var(--accent-foreground)" }}
-                className="cursor-default rounded-full border border-border bg-card px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm"
+          
+          <div className="mt-12 grid grid-cols-2 gap-3 sm:mt-16 sm:grid-cols-4 sm:gap-4 md:grid-cols-6 lg:grid-cols-12 lg:grid-rows-2">
+            {/* Featured: Go */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="col-span-2 row-span-1 flex flex-col justify-between rounded-3xl border border-border bg-card p-6 sm:row-span-2 lg:col-span-4"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+                <span className="font-display text-2xl">Go</span>
+              </div>
+              <div>
+                <h4 className="font-display text-2xl sm:text-3xl">Go / Backend</h4>
+                <p className="mt-2 text-sm text-muted-foreground">Building high-performance, concurrent systems and APIs.</p>
+              </div>
+            </motion.div>
+
+            {/* Featured: React */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="col-span-2 row-span-1 flex flex-col justify-between rounded-3xl border border-border bg-primary p-6 text-primary-foreground lg:col-span-5"
+            >
+              <h4 className="font-display text-3xl sm:text-4xl">React & TypeScript</h4>
+              <p className="mt-2 text-sm opacity-80">Type-safe, component-driven frontend architecture.</p>
+            </motion.div>
+
+            {/* AI/ML */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="col-span-1 row-span-1 flex flex-col items-center justify-center rounded-3xl border border-border bg-card p-6 lg:col-span-3"
+            >
+              <span className="text-3xl">🤖</span>
+              <span className="mt-2 text-xs font-semibold tracking-widest opacity-60">AI / LLM</span>
+            </motion.div>
+
+            {/* Python */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="col-span-1 row-span-1 flex flex-col items-center justify-center rounded-3xl border border-border bg-accent p-6 text-accent-foreground lg:col-span-3"
+            >
+              <span className="font-display text-2xl">PY</span>
+            </motion.div>
+
+            {/* Database */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              className="col-span-2 row-span-1 flex items-center justify-between rounded-3xl border border-border bg-card p-6 lg:col-span-5"
+            >
+              <div>
+                <h4 className="font-display text-xl sm:text-2xl">Databases</h4>
+                <p className="text-xs text-muted-foreground">Postgres, MongoDB, Redis</p>
+              </div>
+              <span className="text-2xl">🗄️</span>
+            </motion.div>
+
+            {/* Others - mini cards */}
+            {["Node.js", "Django", "Supabase", "Git", "Docker"].map((item) => (
+              <motion.div
+                key={item}
+                whileHover={{ y: -4, backgroundColor: "var(--accent)", color: "var(--accent-foreground)" }}
+                className="col-span-1 flex items-center justify-center rounded-2xl border border-border bg-card p-4 text-xs font-medium transition-colors lg:col-span-2"
               >
-                {s}
-              </motion.span>
+                {item}
+              </motion.div>
             ))}
           </div>
         </div>
@@ -302,7 +357,7 @@ function Index() {
             <p className="relative text-xs font-semibold tracking-[0.3em] opacity-70">[ CONTACT ]</p>
             <h2 className="relative mt-4 font-display text-5xl sm:text-7xl md:text-9xl">Let's build<br />something<span className="text-accent">.</span></h2>
             <div className="relative mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
-              <Magnetic><a href="mailto:rohan@example.com" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground sm:px-7 sm:py-3 sm:text-base">Email me</a></Magnetic>
+              <Magnetic><button onClick={open} className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground sm:px-7 sm:py-3 sm:text-base">Get in touch</button></Magnetic>
               <Magnetic><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">LinkedIn</a></Magnetic>
               <Magnetic><Link to="/blog" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">Read the blog →</Link></Magnetic>
             </div>
