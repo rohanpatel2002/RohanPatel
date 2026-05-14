@@ -281,69 +281,145 @@ function Index() {
           <Reveal><p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">[ STACK ]</p></Reveal>
           <WordReveal text="Tools of trade." className="mt-4 font-display text-5xl sm:text-6xl md:text-8xl" />
           
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:mt-16 sm:grid-cols-4 sm:gap-4 md:grid-cols-6 lg:grid-cols-12 lg:grid-rows-2">
-            {/* Featured: Go */}
+          {/* Flawless 4x3 Bento Box layout */}
+          <div className="mt-12 grid grid-cols-1 gap-4 sm:mt-16 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-3">
+            
+            {/* Slot 1: Go / Core Engine (2 cols x 2 rows) */}
             <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="col-span-2 row-span-1 flex flex-col justify-between rounded-3xl border border-border bg-card p-6 sm:row-span-2 lg:col-span-4"
+              whileHover={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-8 md:col-span-2 md:row-span-2"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
-                <span className="font-display text-2xl">Go</span>
+              {/* Subtle architectural background texture */}
+              <div className="absolute inset-0 bg-[radial-gradient(var(--accent)_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
+              
+              <div className="relative flex items-center justify-between">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+                  <span className="font-display text-3xl">Go</span>
+                </div>
+                <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                  [ CORE ENGINE ]
+                </span>
               </div>
-              <div>
-                <h4 className="font-display text-2xl sm:text-3xl">Go / Backend</h4>
-                <p className="mt-2 text-sm text-muted-foreground">Building high-performance, concurrent systems and APIs.</p>
+              
+              <div className="relative mt-12 sm:mt-24">
+                <h4 className="font-display text-3xl sm:text-4xl md:text-5xl">Go & Backend Systems</h4>
+                <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  Building highly concurrent system components, robust deployment gates, and resilient API contracts engineered to perform predictably under load.
+                </p>
               </div>
             </motion.div>
 
-            {/* Featured: React */}
+            {/* Slot 2: React & TypeScript (2 cols x 1 row) */}
             <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="col-span-2 row-span-1 flex flex-col justify-between rounded-3xl border border-border bg-primary p-6 text-primary-foreground lg:col-span-5"
+              whileHover={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground md:col-span-2"
             >
-              <h4 className="font-display text-3xl sm:text-4xl">React & TypeScript</h4>
-              <p className="mt-2 text-sm opacity-80">Type-safe, component-driven frontend architecture.</p>
+              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-2xl" />
+              <div className="relative flex items-center justify-between opacity-80">
+                <span className="font-mono text-xs tracking-widest uppercase">Frontend Architecture</span>
+                <span className="h-2 w-2 rounded-full bg-accent" />
+              </div>
+              <div className="relative mt-8">
+                <h4 className="font-display text-3xl sm:text-4xl">React & TypeScript</h4>
+                <p className="mt-2 text-sm leading-relaxed opacity-80 sm:text-base">
+                  Type-safe, highly modular interactive user interfaces built with custom design systems, smooth motion layouts, and state predictability.
+                </p>
+              </div>
             </motion.div>
 
-            {/* AI/ML */}
+            {/* Slot 3: AI Integration (1 col x 1 row) */}
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              className="col-span-1 row-span-1 flex flex-col items-center justify-center rounded-3xl border border-border bg-card p-6 lg:col-span-3"
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
             >
-              <span className="text-3xl">🤖</span>
-              <span className="mt-2 text-xs font-semibold tracking-widest opacity-60">AI / LLM</span>
+              <div className="flex items-center justify-between">
+                <span className="text-2xl sm:text-3xl">🤖</span>
+                <span className="font-mono text-[10px] tracking-widest text-accent uppercase">LLMs / RAG</span>
+              </div>
+              <div className="mt-8">
+                <h4 className="font-display text-xl sm:text-2xl">AI Integration</h4>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Embedding pipelines, LangChain agents, and structured outputs with high-fidelity semantic validation.
+                </p>
+              </div>
             </motion.div>
 
-            {/* Python */}
+            {/* Slot 4: Databases (1 col x 1 row) */}
             <motion.div 
               whileHover={{ scale: 1.02 }}
-              className="col-span-1 row-span-1 flex flex-col items-center justify-center rounded-3xl border border-border bg-accent p-6 text-accent-foreground lg:col-span-3"
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
             >
-              <span className="font-display text-2xl">PY</span>
-            </motion.div>
-
-            {/* Database */}
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              className="col-span-2 row-span-1 flex items-center justify-between rounded-3xl border border-border bg-card p-6 lg:col-span-5"
-            >
-              <div>
+              <div className="flex items-center justify-between">
+                <span className="text-2xl sm:text-3xl">🗄️</span>
+                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Persistence</span>
+              </div>
+              <div className="mt-8">
                 <h4 className="font-display text-xl sm:text-2xl">Databases</h4>
-                <p className="text-xs text-muted-foreground">Postgres, MongoDB, Redis</p>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Postgres, Redis, MongoDB, and pgvector optimized for low-latency relational and semantic retrievals.
+                </p>
               </div>
-              <span className="text-2xl">🗄️</span>
             </motion.div>
 
-            {/* Others - mini cards */}
-            {["Node.js", "Django", "Supabase", "Git", "Docker"].map((item) => (
-              <motion.div
-                key={item}
-                whileHover={{ y: -4, backgroundColor: "var(--accent)", color: "var(--accent-foreground)" }}
-                className="col-span-1 flex items-center justify-center rounded-2xl border border-border bg-card p-4 text-xs font-medium transition-colors lg:col-span-2"
-              >
-                {item}
-              </motion.div>
-            ))}
+            {/* Slot 5: Python (1 col x 1 row) */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
+            >
+              <div className="flex items-center justify-between">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 font-display text-sm text-accent">PY</span>
+                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Scripting</span>
+              </div>
+              <div className="mt-8">
+                <h4 className="font-display text-xl sm:text-2xl">Python Engine</h4>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Django REST interfaces, data parsing automation, and rapid exploratory backend pipelines.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Slot 6: DevOps (1 col x 1 row) */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xl sm:text-2xl">⚡</span>
+                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Infra</span>
+              </div>
+              <div className="mt-8">
+                <h4 className="font-display text-xl sm:text-2xl">DevOps & CI</h4>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                  Docker containerization, Git governance workflows, and custom active deployment safety gates.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Slot 7: Ecosystem Arsenal Track (2 cols x 1 row) */}
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="flex flex-col justify-between rounded-3xl border border-border bg-card p-6 md:col-span-2"
+            >
+              <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">[ RUNTIMES & PROTOCOLS ]</span>
+              <div className="mt-4 flex flex-wrap gap-2 sm:gap-2.5">
+                {["Node.js", "Supabase", "REST APIs", "gRPC", "SQL", "Postman", "Linux", "CI/CD"].map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-border/60 bg-muted/30 px-3 py-1.5 text-xs font-medium text-foreground sm:px-4 sm:py-2"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+
           </div>
         </div>
       </section>
