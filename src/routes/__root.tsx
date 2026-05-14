@@ -72,10 +72,15 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { ContactModal } from "@/components/ContactModal";
+import { useContactModal } from "@/hooks/use-contact-modal";
+import { Toaster } from "sonner";
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   // Show loader only once per browser session
   const [loaded, setLoaded] = useState(false);
+  const { isOpen, close } = useContactModal();
 
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
@@ -105,6 +110,8 @@ function RootComponent() {
           <Outlet />
         </PageTransition>
       </motion.div>
+      <ContactModal isOpen={isOpen} onClose={close} />
+      <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
 }
