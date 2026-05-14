@@ -141,7 +141,6 @@ function Hero() {
             </motion.span>
           </span>
         </h1>
-
       </motion.div>
 
       {/* scroll cue */}
@@ -159,8 +158,150 @@ function Hero() {
   );
 }
 
+const rulesData = [
+  {
+    id: "01",
+    title: "Maximize Context Density",
+    subtitle: "Keyword proximity weighting",
+    blurb: "Modern applicant routing systems weigh semantic proximity over raw string matching. Action verbs coupled with absolute metric clusters score up to 3.4x higher pass indices.",
+    code: `package pipeline
 
+// Rule 01: Context Density Weighting
+func EvaluateImpact(bullet string) float64 {
+    verbs := ExtractActionVerbs(bullet)
+    metrics := ParseAbsoluteMetrics(bullet)
+    
+    if len(verbs) > 0 && len(metrics) > 0 {
+        return CalculateProximityScore(verbs[0], metrics[0]) * 1.5
+    }
+    return 0.2 // Orphaned string weight
+}`
+  },
+  {
+    id: "02",
+    title: "Term Vector Proximity",
+    subtitle: "Explicit schema taxonomy bindings",
+    blurb: "Avoid unstructured creative section headers. Parsers map documents into standard taxonomy nodes. Using canonical section identifiers ensures guaranteed parsing extraction.",
+    code: `package taxonomy
 
+// Rule 02: Explicit Schema Encodings
+var CanonicalHeaders = map[string]TaxonomyNode{
+    "EXPERIENCE":   NodeProfessionalHistory,
+    "PUBLICATIONS": NodeScholarlyResearch,
+    "SKILLS":       NodeTechnicalCapabilities,
+}
+
+func ExtractSection(token string) (TaxonomyNode, bool) {
+    // Exact schema bindings pass parsing layers natively
+    node, exists := CanonicalHeaders[strings.ToUpper(token)]
+    return node, exists
+}`
+  },
+  {
+    id: "03",
+    title: "Optical Stream Flattening",
+    subtitle: "Deterministic flow formatting",
+    blurb: "Complex column floats and custom graphical glyphs fail standard optical character recognition streams. Pure, single-column nested flow layouts ensure flawless string normalization.",
+    code: `package textstream
+
+// Rule 03: Flatten Structural Floats
+func NormalizeDocumentStream(layout Node) string {
+    if layout.HasFloat() || layout.IsMultiColumn() {
+        // Warning: Non-linear character stream injection risk
+        return FlattenOpticalStream(layout, StripFormatting)
+    }
+    return DirectBufferRead(layout)
+}`
+  }
+];
+
+function BookDeck() {
+  const [activeTab, setActiveTab] = useState(0);
+  const rule = rulesData[activeTab];
+
+  return (
+    <section className="px-4 pt-24 sm:px-6 sm:pt-32">
+      <div className="mx-auto max-w-7xl">
+        <Reveal><p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">[ FEATURED PUBLICATION ]</p></Reveal>
+        <WordReveal text="Hired by an Algorithm." className="mt-4 font-display text-4xl sm:text-5xl md:text-7xl" />
+        <Reveal delay={0.2}>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Distilling algorithmic applicant tracking systems (ATS) into concrete document engineering contracts. Explore interactive execution modules from the book below.
+          </p>
+        </Reveal>
+
+        <div className="mt-12 grid grid-cols-1 overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-12">
+            
+            {/* Left controls */}
+            <div className="flex flex-col justify-between border-b border-border p-6 sm:p-8 lg:col-span-5 lg:border-b-0 lg:border-r">
+              <div>
+                <span className="font-mono text-xs text-accent uppercase tracking-widest">[ ALGORITHMIC CONTRACTS ]</span>
+                <div className="mt-6 flex flex-col gap-2.5 sm:gap-3">
+                  {rulesData.map((r, i) => (
+                    <button
+                      key={r.id}
+                      onClick={() => setActiveTab(i)}
+                      className={`flex flex-col items-start rounded-2xl border p-4 text-left transition-all ${
+                        activeTab === i
+                          ? "border-accent bg-accent/10 text-foreground shadow-sm"
+                          : "border-border/40 bg-background/50 text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                      }`}
+                    >
+                      <div className="flex w-full items-center justify-between">
+                        <span className="font-mono text-xs font-bold text-accent">RULE {r.id}</span>
+                        {activeTab === i && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+                      </div>
+                      <span className="mt-1 font-display text-base font-semibold sm:text-lg">{r.title}</span>
+                      <span className="text-xs opacity-70">{r.subtitle}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 rounded-xl bg-muted/40 p-4 border border-border/40">
+                <p className="text-xs italic text-muted-foreground">
+                  "{rule.blurb}"
+                </p>
+              </div>
+            </div>
+
+            {/* Right IDE layout */}
+            <div className="flex flex-col bg-[#0b0f17] font-mono text-xs text-gray-300 lg:col-span-7">
+              {/* IDE Header tabs */}
+              <div className="flex items-center justify-between border-b border-gray-800 bg-[#070a0f] px-4 py-2.5">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/80" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
+                  <span className="ml-2 font-mono text-[11px] text-gray-500">evaluator_rule_{rule.id}.go</span>
+                </div>
+                <span className="text-[10px] text-gray-500">Go 1.22 runtime</span>
+              </div>
+
+              {/* IDE body */}
+              <div className="relative flex-1 p-6 overflow-x-auto">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={rule.id}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <pre className="leading-relaxed">
+                      <code>{rule.code}</code>
+                    </pre>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
 
 function Index() {
   const { open } = useContactModal();
@@ -176,18 +317,18 @@ function Index() {
             <p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">[ ABOUT ]</p>
           </Reveal>
           <div className="mt-6 grid gap-6 md:grid-cols-12 md:gap-10">
-            <WordReveal text="A bit about my work." className="font-display text-4xl sm:text-5xl md:col-span-5 md:text-7xl" />
-            <div className="md:col-span-7">
-              <Reveal delay={0.2}>
-                <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                      I'm fascinated by building systems that behave well under load, intent, and time. 
-                    Whether it's a deployment gate that catches bad pushes, a semantic document engine, 
-                  or an AI code reviewer — I care about the parts most people skip: the data model,
-                  the failure modes, and the shape of the API. Currently building at Praalak Tech Solutions
-                  and interning as a Research Software Engineer at the Physical Research Laboratory.
-                </p>
-              </Reveal>
-            </div>
+              <WordReveal text="A bit about my work." className="font-display text-4xl sm:text-5xl md:col-span-5 md:text-7xl" />
+              <div className="md:col-span-7">
+                <Reveal delay={0.2}>
+                  <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                        I'm fascinated by building systems that behave well under load, intent, and time. 
+                      Whether it's a deployment gate that catches bad pushes, a semantic document engine, 
+                    or an AI code reviewer — I care about the parts most people skip: the data model,
+                    the failure modes, and the shape of the API. Currently building at Praalak Tech Solutions
+                    and interning as a Research Software Engineer at the Physical Research Laboratory.
+                  </p>
+                </Reveal>
+              </div>
           </div>
         </div>
       </section>
@@ -205,24 +346,24 @@ function Index() {
             {projects.map((p, i) => (
               <Reveal key={p.name} delay={i * 0.1}>
                 <Link to="/projects/$slug" params={{ slug: p.slug }}>
-                  <Tilt intensity={10}>
-                    <motion.article
-                      whileHover={{ y: -6 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
-                    >
+                <Tilt intensity={10}>
+                      <motion.article
+                        whileHover={{ y: -6 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                        className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8"
+                      >
 
-                    <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                    <div className="relative">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
-                      <h3 className="mt-3 break-words font-display text-4xl sm:text-5xl md:text-6xl">{p.name}</h3>
-                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">{p.blurb}</p>
-                    </div>
-                    <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-border pt-5 text-xs sm:mt-8 sm:text-sm">
-                      <span className="text-muted-foreground">{p.meta}</span>
-                      <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
-                    </div>
-                  </motion.article>
+                      <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="relative">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
+                        <h3 className="mt-3 break-words font-display text-4xl sm:text-5xl md:text-6xl">{p.name}</h3>
+                        <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">{p.blurb}</p>
+                      </div>
+                      <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-border pt-5 text-xs sm:mt-8 sm:text-sm">
+                        <span className="text-muted-foreground">{p.meta}</span>
+                        <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
+                      </div>
+                    </motion.article>
                 </Tilt>
               </Link>
             </Reveal>
@@ -283,146 +424,149 @@ function Index() {
           
           {/* Flawless 4x3 Bento Box layout */}
           <div className="mt-12 grid grid-cols-1 gap-4 sm:mt-16 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-3">
-            
-            {/* Slot 1: Go / Core Engine (2 cols x 2 rows) */}
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-8 md:col-span-2 md:row-span-2"
-            >
-              {/* Subtle architectural background texture */}
-              <div className="absolute inset-0 bg-[radial-gradient(var(--accent)_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
               
-              <div className="relative flex items-center justify-between">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent">
-                  <span className="font-display text-3xl">Go</span>
-                </div>
-                <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-                  [ CORE ENGINE ]
-                </span>
-              </div>
-              
-              <div className="relative mt-12 sm:mt-24">
-                <h4 className="font-display text-3xl sm:text-4xl md:text-5xl">Go & Backend Systems</h4>
-                <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  Building highly concurrent system components, robust deployment gates, and resilient API contracts engineered to perform predictably under load.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Slot 2: React & TypeScript (2 cols x 1 row) */}
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground md:col-span-2"
-            >
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-2xl" />
-              <div className="relative flex items-center justify-between opacity-80">
-                <span className="font-mono text-xs tracking-widest uppercase">Frontend Architecture</span>
-                <span className="h-2 w-2 rounded-full bg-accent" />
-              </div>
-              <div className="relative mt-8">
-                <h4 className="font-display text-3xl sm:text-4xl">React & TypeScript</h4>
-                <p className="mt-2 text-sm leading-relaxed opacity-80 sm:text-base">
-                  Type-safe, highly modular interactive user interfaces built with custom design systems, smooth motion layouts, and state predictability.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Slot 3: AI Integration (1 col x 1 row) */}
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-2xl sm:text-3xl">🤖</span>
-                <span className="font-mono text-[10px] tracking-widest text-accent uppercase">LLMs / RAG</span>
-              </div>
-              <div className="mt-8">
-                <h4 className="font-display text-xl sm:text-2xl">AI Integration</h4>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Embedding pipelines, LangChain agents, and structured outputs with high-fidelity semantic validation.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Slot 4: Databases (1 col x 1 row) */}
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-2xl sm:text-3xl">🗄️</span>
-                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Persistence</span>
-              </div>
-              <div className="mt-8">
-                <h4 className="font-display text-xl sm:text-2xl">Databases</h4>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Postgres, Redis, MongoDB, and pgvector optimized for low-latency relational and semantic retrievals.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Slot 5: Python (1 col x 1 row) */}
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
-            >
-              <div className="flex items-center justify-between">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 font-display text-sm text-accent">PY</span>
-                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Scripting</span>
-              </div>
-              <div className="mt-8">
-                <h4 className="font-display text-xl sm:text-2xl">Python Engine</h4>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Django REST interfaces, data parsing automation, and rapid exploratory backend pipelines.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Slot 6: DevOps (1 col x 1 row) */}
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xl sm:text-2xl">⚡</span>
-                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Infra</span>
-              </div>
-              <div className="mt-8">
-                <h4 className="font-display text-xl sm:text-2xl">DevOps & CI</h4>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  Docker containerization, Git governance workflows, and custom active deployment safety gates.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Slot 7: Ecosystem Arsenal Track (2 cols x 1 row) */}
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="flex flex-col justify-between rounded-3xl border border-border bg-card p-6 md:col-span-2"
-            >
-              <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">[ RUNTIMES & PROTOCOLS ]</span>
-              <div className="mt-4 flex flex-wrap gap-2 sm:gap-2.5">
-                {["Node.js", "Supabase", "REST APIs", "gRPC", "SQL", "Postman", "Linux", "CI/CD"].map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-border/60 bg-muted/30 px-3 py-1.5 text-xs font-medium text-foreground sm:px-4 sm:py-2"
-                  >
-                    {item}
+              {/* Slot 1: Go / Core Engine (2 cols x 2 rows) */}
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-card p-8 md:col-span-2 md:row-span-2"
+              >
+                {/* Subtle architectural background texture */}
+                <div className="absolute inset-0 bg-[radial-gradient(var(--accent)_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
+                
+                <div className="relative flex items-center justify-between">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+                    <span className="font-display text-3xl">Go</span>
+                  </div>
+                  <span className="rounded-full border border-border px-3 py-1 font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                    [ CORE ENGINE ]
                   </span>
-                ))}
-              </div>
-            </motion.div>
+                </div>
+                
+                <div className="relative mt-12 sm:mt-24">
+                  <h4 className="font-display text-3xl sm:text-4xl md:text-5xl">Go & Backend Systems</h4>
+                  <p className="mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    Building highly concurrent system components, robust deployment gates, and resilient API contracts engineered to perform predictably under load.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Slot 2: React & TypeScript (2 cols x 1 row) */}
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="relative flex flex-col justify-between overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground md:col-span-2"
+              >
+                <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-2xl" />
+                <div className="relative flex items-center justify-between opacity-80">
+                  <span className="font-mono text-xs tracking-widest uppercase">Frontend Architecture</span>
+                  <span className="h-2 w-2 rounded-full bg-accent" />
+                </div>
+                <div className="relative mt-8">
+                  <h4 className="font-display text-3xl sm:text-4xl">React & TypeScript</h4>
+                  <p className="mt-2 text-sm leading-relaxed opacity-80 sm:text-base">
+                    Type-safe, highly modular interactive user interfaces built with custom design systems, smooth motion layouts, and state predictability.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Slot 3: AI Integration (1 col x 1 row) */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl sm:text-3xl">🤖</span>
+                  <span className="font-mono text-[10px] tracking-widest text-accent uppercase">LLMs / RAG</span>
+                </div>
+                <div className="mt-8">
+                  <h4 className="font-display text-xl sm:text-2xl">AI Integration</h4>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Embedding pipelines, LangChain agents, and structured outputs with high-fidelity semantic validation.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Slot 4: Databases (1 col x 1 row) */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl sm:text-3xl">🗄️</span>
+                  <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Persistence</span>
+                </div>
+                <div className="mt-8">
+                  <h4 className="font-display text-xl sm:text-2xl">Databases</h4>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Postgres, Redis, MongoDB, and pgvector optimized for low-latency relational and semantic retrievals.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Slot 5: Python (1 col x 1 row) */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 font-display text-sm text-accent">PY</span>
+                  <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Scripting</span>
+                </div>
+                <div className="mt-8">
+                  <h4 className="font-display text-xl sm:text-2xl">Python Engine</h4>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Django REST interfaces, data parsing automation, and rapid exploratory backend pipelines.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Slot 6: DevOps (1 col x 1 row) */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xl sm:text-2xl">⚡</span>
+                  <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Infra</span>
+                </div>
+                <div className="mt-8">
+                  <h4 className="font-display text-xl sm:text-2xl">DevOps & CI</h4>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Docker containerization, Git governance workflows, and custom active deployment safety gates.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Slot 7: Ecosystem Arsenal Track (2 cols x 1 row) */}
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="flex flex-col justify-between rounded-3xl border border-border bg-card p-6 md:col-span-2"
+              >
+                <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">[ RUNTIMES & PROTOCOLS ]</span>
+                <div className="mt-4 flex flex-wrap gap-2 sm:gap-2.5">
+                  {["Node.js", "Supabase", "REST APIs", "gRPC", "SQL", "Postman", "Linux", "CI/CD"].map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-border/60 bg-muted/30 px-3 py-1.5 text-xs font-medium text-foreground sm:px-4 sm:py-2"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
 
           </div>
         </div>
       </section>
+
+      {/* PUBLICATION DECK */}
+      <BookDeck />
 
       {/* CONTACT */}
       {/* CONTACT */}
