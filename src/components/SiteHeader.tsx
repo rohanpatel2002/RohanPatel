@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { useContactModal } from "@/hooks/use-contact-modal";
 import { Moon, Sun } from "lucide-react";
+import { Marquee } from "@/components/Motion";
 
 const links: { label: string; to: string; hash?: string }[] = [
   { label: "Projects", to: "/projects" },
@@ -112,17 +113,89 @@ export function SiteHeader() {
 }
 
 export function SiteFooter() {
+  const { open: openContact } = useContactModal();
+  
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-border bg-card sm:mt-32">
-      <div className="pointer-events-none select-none px-4">
-        <div className="font-display text-[22vw] leading-none text-foreground/[0.06]">ROHAN</div>
-      </div>
-      <div className="mx-auto -mt-4 flex max-w-7xl flex-col gap-4 px-6 pb-10 sm:-mt-8 sm:gap-6 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="font-display text-2xl">Let's talk<span className="text-accent">.</span></p>
-          <a href="mailto:rohan@example.com" className="text-sm text-muted-foreground hover:text-accent sm:text-base">rohan@example.com</a>
+    <footer className="relative mt-24 overflow-hidden sm:mt-32">
+      {/* Main Footer Block with Geometric Cut */}
+      <div 
+        className="relative z-20 bg-foreground text-background px-6 pt-16 pb-24 md:px-12 md:pt-24 md:pb-40 shadow-2xl" 
+        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%)' }}
+      >
+        <div className="mx-auto max-w-7xl">
+          {/* Top Row: Email & Socials */}
+          <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+            <a 
+              href="mailto:HELLO@ROHAN.DEV" 
+              className="group flex flex-col items-start hover:text-accent transition-all duration-700"
+            >
+              <span className="font-sans text-lg font-light tracking-[0.4em] text-background/40 uppercase sm:text-xl md:text-2xl mb-1 group-hover:text-accent/60 transition-colors">
+                CONNECT
+              </span>
+              <div className="relative overflow-hidden font-display text-5xl sm:text-7xl md:text-9xl tracking-tighter leading-none uppercase">
+                <span className="block group-hover:-translate-y-[110%] transition-transform duration-700 ease-[0.22,1,0.36,1]">
+                  ROHAN.DEV
+                </span>
+                <span className="absolute inset-0 block translate-y-[110%] group-hover:translate-y-0 transition-transform duration-700 ease-[0.22,1,0.36,1] text-accent">
+                  ROHAN.DEV
+                </span>
+              </div>
+            </a>
+            
+            <div className="flex flex-wrap gap-x-8 gap-y-3 font-mono text-[10px] tracking-[0.2em] text-background/50 uppercase">
+              {['Dribbble', 'X(Twitter)', 'LinkedIn', 'Github', 'Instagram'].map(s => (
+                <a key={s} href="#" className="hover:text-background transition-colors">{s}</a>
+              ))}
+            </div>
+          </div>
+          
+          {/* Middle Row: Navigation Links */}
+          <div className="mt-20 flex flex-wrap gap-x-12 gap-y-6 font-mono text-xs tracking-[0.2em] text-background/60 uppercase md:mt-32">
+            {links.map((l) => (
+              <Link key={l.label} to={l.to} className="hover:text-background transition-colors">
+                {l.label}
+              </Link>
+            ))}
+            <Link to="/blog" className="hover:text-background transition-colors">Articles</Link>
+          </div>
+          
+          {/* Bottom Row: CTA & Address */}
+          <div className="mt-12 flex flex-col items-start justify-between gap-12 md:flex-row md:items-end">
+            <button 
+              onClick={openContact}
+              className="group relative inline-flex items-center justify-center bg-background px-14 py-5 text-[10px] font-bold tracking-[0.3em] text-foreground uppercase transition-all hover:bg-accent hover:text-background"
+              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 75%, 88% 100%, 0 100%)' }}
+            >
+              <span className="relative z-10">Let's talk</span>
+              <motion.div 
+                className="absolute inset-0 bg-accent"
+                initial={{ scaleX: 0 }}
+                whileHover={{ scaleX: 1 }}
+                style={{ originX: 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </button>
+            
+            <div className="max-w-[240px] font-mono text-[9px] leading-relaxed tracking-[0.2em] text-background/40 uppercase">
+              BASED IN GUJARAT, INDIA — AVAILABLE FOR RESEARCH ROLES & SYSTEMS ARCHITECTURE GLOBALLY.
+            </div>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground sm:text-sm">© {new Date().getFullYear()} Rohan Patel — Built with intent.</p>
+      </div>
+      
+      {/* Massive Outlined Brand Bleed - The "Damn" Factor */}
+      <div className="relative -mt-16 sm:-mt-32 pointer-events-none select-none bg-background pb-8 pt-32 overflow-hidden z-10">
+        {/* Viewport Bleeding Outline Text */}
+        <motion.div 
+          initial={{ y: 60, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="font-display text-[35vw] leading-[0.7] tracking-[-0.05em] text-transparent font-black uppercase text-center opacity-80"
+          style={{ WebkitTextStroke: '2px var(--color-foreground)' }}
+        >
+          ROHAN
+        </motion.div>
       </div>
     </footer>
   );

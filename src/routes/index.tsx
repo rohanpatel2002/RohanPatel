@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Reveal, WordReveal, Marquee, Parallax, Magnetic, ScrambleText, Tilt } from "@/components/Motion";
 import { useContactModal } from "@/hooks/use-contact-modal";
+import { Brain, Database, Zap, Code2, Cpu } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -358,10 +359,21 @@ function Index() {
                         <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
                         <h3 className="mt-3 break-words font-display text-4xl sm:text-5xl md:text-6xl">{p.name}</h3>
                         <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">{p.blurb}</p>
+                        
+                        {p.specs && (
+                          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-border/50 py-5 sm:mt-8">
+                            {Object.entries(p.specs).map(([key, value]) => (
+                              <div key={key} className="flex flex-col">
+                                <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">{key}</span>
+                                <span className="mt-1 text-[11px] font-medium text-foreground sm:text-xs">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-border pt-5 text-xs sm:mt-8 sm:text-sm">
-                        <span className="text-muted-foreground">{p.meta}</span>
-                        <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
+                      <div className="relative mt-6 flex items-center justify-between gap-3 pt-2 text-xs sm:mt-8 sm:text-sm">
+                        <span className="text-muted-foreground opacity-70">{p.meta}</span>
+                        <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View Details →</motion.span>
                       </div>
                     </motion.article>
                 </Tilt>
@@ -477,7 +489,13 @@ function Index() {
                 className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl sm:text-3xl">🤖</span>
+                  <div className="relative group/icon">
+                    <div className="absolute inset-0 bg-accent/20 blur-xl opacity-0 group-hover/icon:opacity-100 transition-opacity" />
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card shadow-inner">
+                      <Brain size={28} className="text-accent group-hover:scale-110 transition-transform duration-500" />
+                      <span className="absolute -bottom-1 -right-1 rounded-sm bg-background border border-border px-1 font-mono text-[8px] text-muted-foreground">0xAI</span>
+                    </div>
+                  </div>
                   <span className="font-mono text-[10px] tracking-widest text-accent uppercase">LLMs / RAG</span>
                 </div>
                 <div className="mt-8">
@@ -495,7 +513,13 @@ function Index() {
                 className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl sm:text-3xl">🗄️</span>
+                  <div className="relative group/icon">
+                    <div className="absolute inset-0 bg-foreground/10 blur-xl opacity-0 group-hover/icon:opacity-100 transition-opacity" />
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card shadow-inner">
+                      <Database size={28} className="text-foreground/70 group-hover:scale-110 transition-transform duration-500" />
+                      <span className="absolute -bottom-1 -right-1 rounded-sm bg-background border border-border px-1 font-mono text-[8px] text-muted-foreground">DB_01</span>
+                    </div>
+                  </div>
                   <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Persistence</span>
                 </div>
                 <div className="mt-8">
@@ -513,7 +537,13 @@ function Index() {
                 className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
               >
                 <div className="flex items-center justify-between">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 font-display text-sm text-accent">PY</span>
+                  <div className="relative group/icon">
+                    <div className="absolute inset-0 bg-accent/20 blur-xl opacity-0 group-hover/icon:opacity-100 transition-opacity" />
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card shadow-inner">
+                      <Code2 size={28} className="text-accent group-hover:scale-110 transition-transform duration-500" />
+                      <span className="absolute -bottom-1 -right-1 rounded-sm bg-background border border-border px-1 font-mono text-[8px] text-muted-foreground">PY_3.12</span>
+                    </div>
+                  </div>
                   <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Scripting</span>
                 </div>
                 <div className="mt-8">
@@ -531,7 +561,13 @@ function Index() {
                 className="group relative flex flex-col justify-between rounded-3xl border border-border bg-card p-6"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xl sm:text-2xl">⚡</span>
+                  <div className="relative group/icon">
+                    <div className="absolute inset-0 bg-foreground/10 blur-xl opacity-0 group-hover/icon:opacity-100 transition-opacity" />
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-card shadow-inner">
+                      <Zap size={28} className="text-foreground/70 group-hover:scale-110 transition-transform duration-500" />
+                      <span className="absolute -bottom-1 -right-1 rounded-sm bg-background border border-border px-1 font-mono text-[8px] text-muted-foreground">INFRA_Z</span>
+                    </div>
+                  </div>
                   <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">Infra</span>
                 </div>
                 <div className="mt-8">
@@ -576,10 +612,10 @@ function Index() {
             <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/40 blur-3xl" style={{ animation: "blob 18s ease-in-out infinite" }} />
             <p className="relative text-xs font-semibold tracking-[0.3em] opacity-70">[ CONTACT ]</p>
             <h2 className="relative mt-4 font-display text-5xl sm:text-7xl md:text-9xl">Let's build<br />something<span className="text-accent">.</span></h2>
-            <div className="relative mt-8 flex flex-wrap gap-3 sm:mt-10 sm:gap-4">
-              <Magnetic><button onClick={open} className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground sm:px-7 sm:py-3 sm:text-base">Get in touch</button></Magnetic>
-              <Magnetic><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">LinkedIn</a></Magnetic>
-              <Magnetic><Link to="/blog" className="rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">Read the blog →</Link></Magnetic>
+            <div className="relative mt-8 flex flex-row items-center gap-3 sm:mt-10 sm:gap-4 flex-nowrap overflow-x-auto no-scrollbar">
+              <Magnetic><button onClick={open} className="whitespace-nowrap flex items-center justify-center rounded-full border border-transparent bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground sm:px-7 sm:py-3 sm:text-base">Get in touch</button></Magnetic>
+              <Magnetic><a href="https://linkedin.com" target="_blank" rel="noreferrer" className="whitespace-nowrap flex items-center justify-center rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">LinkedIn</a></Magnetic>
+              <Magnetic><Link to="/blog" className="whitespace-nowrap flex items-center justify-center rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base">Read the blog →</Link></Magnetic>
             </div>
           </div>
         </Reveal>
