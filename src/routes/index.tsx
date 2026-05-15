@@ -358,10 +358,21 @@ function Index() {
                         <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">{p.tag}</p>
                         <h3 className="mt-3 break-words font-display text-4xl sm:text-5xl md:text-6xl">{p.name}</h3>
                         <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">{p.blurb}</p>
+                        
+                        {p.specs && (
+                          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-border/50 py-5 sm:mt-8">
+                            {Object.entries(p.specs).map(([key, value]) => (
+                              <div key={key} className="flex flex-col">
+                                <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">{key}</span>
+                                <span className="mt-1 text-[11px] font-medium text-foreground sm:text-xs">{value}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <div className="relative mt-6 flex items-center justify-between gap-3 border-t border-border pt-5 text-xs sm:mt-8 sm:text-sm">
-                        <span className="text-muted-foreground">{p.meta}</span>
-                        <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View →</motion.span>
+                      <div className="relative mt-6 flex items-center justify-between gap-3 pt-2 text-xs sm:mt-8 sm:text-sm">
+                        <span className="text-muted-foreground opacity-70">{p.meta}</span>
+                        <motion.span className="font-semibold whitespace-nowrap" whileHover={{ x: 4 }}>View Details →</motion.span>
                       </div>
                     </motion.article>
                 </Tilt>

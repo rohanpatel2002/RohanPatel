@@ -5,6 +5,8 @@ export interface Project {
   blurb: string;
   meta: string;
   content?: string;
+  specs?: Record<string, string>;
+  codeSnippet?: string;
 }
 
 export interface BlogPost {
@@ -35,6 +37,13 @@ export const projects: Project[] = [
     tag: "Deployment Safety · Go",
     blurb: "A deployment gate that evaluates deploy intent using live dependencies, incident history, and semantic risk scoring — preventing risky pushes before they ship.",
     meta: "Apache 2.0 · Go",
+    specs: {
+      "Concurrency": "Goroutines / Fan-out",
+      "Governance": "Semantic Risk Scoring",
+      "Latency": "< 20ms evaluation",
+      "State": "Redis / In-memory"
+    },
+    codeSnippet: `func (g *Gate) Evaluate(intent DeploymentIntent) (RiskScore, error) {\n\t// Fan-out check across incident history and live dependencies\n\tg.mu.RLock()\n\tdefer g.mu.RUnlock()\n\n\tscore := g.RiskModel.Calculate(intent)\n\tif score > g.Threshold {\n\t\treturn score, ErrHighRiskDeployment\n\t}\n\treturn score, nil\n}`,
     content: "IronClad is a sophisticated deployment governance tool designed to minimize production risks. By analyzing the intent of a deployment against historical incident data and current system dependencies, it provides a safety layer that traditional CI/CD pipelines often lack."
   },
   {
@@ -43,6 +52,13 @@ export const projects: Project[] = [
     tag: "AI Document Assistant · Go",
     blurb: "AI-powered document assistant with semantic search using Go, pgvector, and fastembed for intelligent retrieval across private document libraries.",
     meta: "Open Source · Go · pgvector",
+    specs: {
+      "Search": "pgvector / Semantic",
+      "Pipeline": "Batch Embedding",
+      "Runtime": "Go / FastEmbed",
+      "Storage": "PostgreSQL"
+    },
+    codeSnippet: `func (s *Search) Query(text string) ([]Document, error) {\n\tvector, err := s.Embedder.Generate(text)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\t// Cosine similarity search via pgvector\n\treturn s.DB.SearchVectors("embeddings", vector, 10)\n}`,
     content: "Docentra leverages the power of vector databases and large language models to provide a seamless document interaction experience. It uses pgvector for efficient semantic search, allowing users to find information based on meaning rather than just keywords."
   },
   {
@@ -51,6 +67,13 @@ export const projects: Project[] = [
     tag: "AI Code Review · TypeScript",
     blurb: "The missing code review layer — AI that reviews what the AI wrote. Detects AI-generated code in PRs, analyzes context blindness, and briefs human reviewers.",
     meta: "MIT · TypeScript",
+    specs: {
+      "Analysis": "Context Blindness Detection",
+      "Model": "GPT-4o / Claude 3.5",
+      "Platform": "GitHub Actions",
+      "Language": "TypeScript / Node.js"
+    },
+    codeSnippet: `async function analyzePR(diff: string) {\n\tconst analysis = await tribunal.analyze(diff);\n\t\n\tif (analysis.isAiGenerated && analysis.riskFactor > 0.7) {\n\t\tawait github.postComment(analysis.brief);\n\t}\n}`,
     content: "Tribunal addresses the growing challenge of AI-generated code. It acts as an intelligent auditor that understands the nuances of code changes, highlighting potential issues that both humans and simple linters might miss."
   },
   {
@@ -59,6 +82,13 @@ export const projects: Project[] = [
     tag: "Book · 2025",
     blurb: "A self-published guide on perfecting your resume — covering achievements, experience, and the mechanics of modern algorithmic hiring.",
     meta: "Self-published · Jun 2025",
+    specs: {
+      "Topic": "ATS Optimization",
+      "Research": "60+ Document Parsers",
+      "Format": "System-Centric Writing",
+      "Status": "Published"
+    },
+    codeSnippet: `// Rule: Optical Stream Flattening\nfunc Normalize(layout Node) string {\n\tif layout.IsMultiColumn() {\n\t\treturn Flatten(layout)\n\t}\n\treturn layout.Text()\n}`,
     content: "This book is a distillation of years of research into how modern applicant tracking systems and hiring algorithms work. It provides actionable advice for job seekers to optimize their resumes for the digital age."
   },
 ];
