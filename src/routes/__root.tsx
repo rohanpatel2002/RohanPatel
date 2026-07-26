@@ -47,8 +47,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Rohan Patel — Software Engineer & Full-Stack / AI Systems" },
-      { name: "description", content: "Portfolio of Rohan Patel — building scalable full-stack and AI systems. Author of Hired by an Algorithm." },
+      { title: "Rohan Patel — Software Engineer | Full-Stack, DevOps & Applied AI" },
+      { name: "description", content: "Software Engineer building production systems from interface to infrastructure. Open to SWE/SDE, full-stack, DevOps, forward-deployed, and AI roles. Author of Hired by an Algorithm." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
