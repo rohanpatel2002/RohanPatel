@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Rohan Patel">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f5f0"/>
+      <stop offset="100%" stop-color="#ebe7df"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="30%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#e85d2a" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#e85d2a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <text x="72" y="120" font-family="Inter, system-ui, sans-serif" font-size="22" letter-spacing="6" fill="#6b6670">SOFTWARE ENGINEER</text>
+  <text x="72" y="280" font-family="Anton, Impact, sans-serif" font-size="118" fill="#1a1820">ROHAN</text>
+  <text x="72" y="400" font-family="Anton, Impact, sans-serif" font-size="118" fill="#1a1820">PATEL</text>
+  <text x="72" y="520" font-family="Inter, system-ui, sans-serif" font-size="28" fill="#6b6670">Systems · AI · Backend · Shipping</text>
+  <circle cx="1080" cy="120" r="8" fill="#e85d2a"/>
+</svg>

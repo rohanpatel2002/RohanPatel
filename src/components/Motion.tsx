@@ -1,15 +1,15 @@
 import { motion, AnimatePresence, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useRef, useState, useEffect, type ReactNode } from "react";
 
-export function Reveal({ children, delay = 0, y = 40 }: { children: ReactNode; delay?: number; y?: number }) {
+export function Reveal({ children, delay = 0, y = 16 }: { children: ReactNode; delay?: number; y?: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-40px" });
   return (
     <motion.div
       ref={ref}
       initial={{ y, opacity: 0 }}
       animate={inView ? { y: 0, opacity: 1 } : {}}
-      transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -18,7 +18,7 @@ export function Reveal({ children, delay = 0, y = 40 }: { children: ReactNode; d
 
 export function WordReveal({ text, className = "" }: { text: string; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const inView = useInView(ref, { once: true, margin: "-40px" });
   const words = text.split(" ");
   return (
     <div ref={ref} className={className}>
@@ -26,11 +26,12 @@ export function WordReveal({ text, className = "" }: { text: string; className?:
         <span key={i} className="inline-block overflow-hidden align-bottom">
           <motion.span
             className="inline-block"
-            initial={{ y: "110%" }}
+            initial={{ y: "100%" }}
             animate={inView ? { y: 0 } : {}}
-            transition={{ duration: 0.8, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.45, delay: Math.min(i * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
           >
-            {w}&nbsp;
+            {w}
+            {i < words.length - 1 ? "\u00A0" : null}
           </motion.span>
         </span>
       ))}
@@ -163,35 +164,25 @@ export function Tilt({ children, intensity = 15 }: { children: ReactNode; intens
   );
 }
 
-export function PageTransition({ children, routeKey }: { children: ReactNode; routeKey: string }) {
-
+/** Scale settle — shrink out, grow into place. */
+export function PageTransition({
+  children,
+  routeKey,
+}: {
+  children: ReactNode;
+  routeKey: string;
+}) {
   return (
     <AnimatePresence mode="wait">
-      <motion.div key={routeKey} className="relative">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {children}
-        </motion.div>
-        
-        {/* Cinematic Curtain Effect */}
-        <motion.div
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 0 }}
-          exit={{ scaleY: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[100] origin-top bg-accent pointer-events-none"
-        />
-        <motion.div
-          initial={{ scaleY: 1 }}
-          animate={{ scaleY: 0 }}
-          exit={{ scaleY: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          className="fixed inset-0 z-[100] origin-bottom bg-accent pointer-events-none"
-        />
+      <motion.div
+        key={routeKey}
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.98 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformOrigin: "50% 20%" }}
+      >
+        {children}
       </motion.div>
     </AnimatePresence>
   );

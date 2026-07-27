@@ -13,6 +13,7 @@ import { Reveal, WordReveal, Magnetic, Tilt } from "@/components/Motion";
 import { useContactModal } from "@/hooks/use-contact-modal";
 import { projects } from "@/lib/data";
 import { site } from "@/lib/site";
+import { formatPostDate, posts } from "@/lib/posts";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,9 +50,9 @@ function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.97]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -394,32 +395,67 @@ function Index() {
               [ ABOUT ]
             </p>
           </Reveal>
-          <div className="mt-6 grid gap-6 md:grid-cols-12 md:gap-10">
-            <WordReveal
-              text="Engineer first."
-              className="font-display text-4xl sm:text-5xl md:col-span-5 md:text-7xl"
-            />
+
+          <div className="mt-6 grid items-start gap-8 md:grid-cols-12 md:gap-12 lg:gap-16">
+            <div className="md:col-span-5">
+              <WordReveal
+                text="Engineer first."
+                className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+              />
+              <Reveal delay={0.15}>
+                <p className="mt-5 max-w-xs text-sm font-light leading-relaxed text-muted-foreground">
+                  Building systems that stay reliable under pressure — from
+                  interface to infrastructure.
+                </p>
+              </Reveal>
+            </div>
+
             <div className="md:col-span-7">
               <Reveal delay={0.2}>
-                <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                <p className="text-base font-light leading-[1.75] text-muted-foreground sm:text-lg sm:leading-[1.7]">
                   Currently building at{" "}
                   <span className="font-medium text-foreground">
                     Praalak Tech Solutions
                   </span>{" "}
-                  and interning as a Research Software Engineer at the{" "}
+                  and contributing research software at the{" "}
                   <span className="font-medium text-foreground">
                     Physical Research Laboratory
                   </span>
-                  . I care about the parts most people skip: data models,
+                  . I care about the parts most people skip — data models,
                   failure modes, and the shape of the API — whether the work is
                   full-stack product, DevOps safety, applied AI, or shipping
                   beside the people who use it.
                 </p>
+
+                <div className="mt-8 grid gap-4 border-y border-border py-6 sm:grid-cols-2">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                      Now
+                    </p>
+                    <p className="mt-2 text-sm text-foreground">
+                      Software Engineer · Praalak
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Research SWE Intern · PRL
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                      Focus
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Full-stack · Backend · DevOps · Applied AI ·
+                      Forward-deployed delivery
+                    </p>
+                  </div>
+                </div>
+
                 <Link
                   to="/about"
-                  className="mt-5 inline-block text-sm font-semibold text-accent hover:underline"
+                  className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-accent transition-colors hover:text-foreground"
                 >
-                  More about me →
+                  More about me
+                  <span aria-hidden>→</span>
                 </Link>
               </Reveal>
             </div>
@@ -443,7 +479,7 @@ function Index() {
               </Link>
             </div>
           </Reveal>
-          <div className="mt-8 grid gap-5 sm:mt-10 sm:gap-6 md:grid-cols-2">
+          <div className="mt-9 grid gap-6 sm:mt-10 sm:gap-7 md:grid-cols-2">
             {projects.map((p, i) => (
               <Reveal key={p.name} delay={i * 0.1}>
                 <Link to="/projects/$slug" params={{ slug: p.slug }} className="block h-full">
@@ -451,9 +487,9 @@ function Index() {
                     <motion.article
                       whileHover={{ y: -6 }}
                       transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                      className="group relative flex h-full min-w-0 flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 sm:p-8"
+                      className="group relative flex h-full min-w-0 flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-card/75 backdrop-blur-sm p-5 sm:p-8"
                     >
-                      <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <span className="absolute inset-0 -z-0 bg-gradient-to-br from-accent/0 via-accent/0 to-accent/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 blur-[22px]" />
                       <div className="relative min-w-0">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-accent sm:text-xs">
                           {p.tag}
@@ -470,7 +506,7 @@ function Index() {
                             {p.roles.map((role) => (
                               <span
                                 key={role}
-                                className="rounded-full border border-border/60 bg-muted/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
+                                className="rounded-full border border-border/70 bg-muted/25 px-2.5 py-1 text-[10px] font-medium text-muted-foreground"
                               >
                                 {role}
                               </span>
@@ -494,7 +530,7 @@ function Index() {
                         )}
                       </div>
                       <div className="relative mt-6 flex flex-col gap-2 border-t border-border/50 pt-4 text-xs sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:border-0 sm:pt-2 sm:text-sm">
-                        <span className="text-muted-foreground opacity-70">
+                        <span className="text-muted-foreground opacity-70 transition-colors transition-opacity group-hover:opacity-100 group-hover:text-accent">
                           {p.meta}
                         </span>
                         <span className="font-semibold sm:whitespace-nowrap">
@@ -503,6 +539,54 @@ function Index() {
                       </div>
                     </motion.article>
                   </Tilt>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WRITING */}
+      <section className="px-4 pt-24 sm:px-6 sm:pt-32">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <div className="flex items-end justify-between gap-4">
+              <p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">
+                [ WRITING ]
+              </p>
+              <Link
+                to="/blog"
+                className="text-sm font-medium text-muted-foreground hover:text-accent"
+              >
+                All essays →
+              </Link>
+            </div>
+            <h2 className="mt-4 font-display text-4xl sm:text-6xl md:text-7xl">
+              Field notes.
+            </h2>
+          </Reveal>
+          <div className="mt-10 divide-y divide-border border-y border-border">
+            {posts.slice(0, 3).map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.08}>
+                <Link
+                  to="/blog/$slug"
+                  params={{ slug: p.slug }}
+                  className="group flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:justify-between sm:py-7"
+                >
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      {formatPostDate(p.date)} · {p.tag}
+                    </p>
+                    <h3 className="mt-2 font-display text-2xl transition-colors group-hover:text-accent sm:text-3xl">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 max-w-2xl text-sm font-light text-muted-foreground">
+                      {p.description}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-sm font-semibold group-hover:text-accent">
+                    Read →
+                  </span>
                 </Link>
               </Reveal>
             ))}

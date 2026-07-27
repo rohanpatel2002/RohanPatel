@@ -1,6 +1,8 @@
 export const site = {
   name: "Rohan Patel",
   title: "Software Engineer",
+  /** Swap to your live domain — used for canonicals, OG, and sitemap. */
+  url: "https://rohanpatel.dev",
   email: "rohanpatel.swe@gmail.com",
   github: "https://github.com/rohanpatel2002",
   linkedin: "https://www.linkedin.com/in/rohanpatel-eng/",
@@ -8,6 +10,7 @@ export const site = {
   resume: "/Rohan_Patel_Resume.pdf",
   orcid: "https://orcid.org/0009-0007-8018-7870",
   location: "Gujarat, India",
+  ogImage: "/og-default.svg",
   availability:
     "Open to SWE / SDE, full-stack, DevOps, forward-deployed, and AI engineering roles.",
   tagline:

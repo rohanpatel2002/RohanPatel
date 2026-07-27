@@ -19,16 +19,6 @@ export interface Project {
   status?: string;
 }
 
-export interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  tag: string;
-  excerpt: string;
-  content?: string;
-  draft?: boolean;
-}
-
 export interface Service {
   n: string;
   title: string;
@@ -234,53 +224,6 @@ export const projects: Project[] = [
     codeSnippet: `// Rule: Optical Stream Flattening\nfunc Normalize(layout Node) string {\n\tif layout.IsMultiColumn() {\n\t\treturn Flatten(layout)\n\t}\n\treturn layout.Text()\n}`,
     content:
       "Hired by an Algorithm is a field guide to how applicant tracking systems and hiring algorithms actually parse resumes. It turns parser quirks into engineering-style contracts.",
-  },
-];
-
-export const posts: BlogPost[] = [
-  {
-    slug: "deployment-gates",
-    title: "Why Deployment Gates Should Read Incidents",
-    date: "May 2026",
-    tag: "Systems",
-    excerpt:
-      "Most CI gates check syntax. The interesting ones check intent — and the best ones learn from your past outages.",
-    content:
-      "In this essay, I explore the evolution of deployment safety. Traditional gates are often too rigid or too simple. By integrating incident history, we can build smarter systems that understand the context of a change.",
-    draft: true,
-  },
-  {
-    slug: "ai-reviewing-ai",
-    title: "AI Reviewing AI: The Missing Layer",
-    date: "Apr 2026",
-    tag: "AI",
-    excerpt:
-      "When LLMs write your PRs, who reviews the context they couldn't see? A field report from building Tribunal.",
-    content:
-      "As AI becomes a primary author of code, the role of the reviewer shifts. We need tools that can specifically target the blind spots of LLMs.",
-    draft: true,
-  },
-  {
-    slug: "pgvector-in-go",
-    title: "Building Semantic Search in Go with pgvector",
-    date: "Mar 2026",
-    tag: "Backend",
-    excerpt:
-      "Notes from shipping Docentra — embedding pipelines, query design, and where Postgres genuinely shines.",
-    content:
-      "Postgres with pgvector is a powerhouse for semantic search. Here's how we implemented the embedding pipeline in Go.",
-    draft: true,
-  },
-  {
-    slug: "hired-by-algorithm",
-    title: "Hired by an Algorithm: Lessons from Writing the Book",
-    date: "Feb 2026",
-    tag: "Career",
-    excerpt:
-      "What modern hiring algorithms actually look at — and the small structural choices that move resumes through them.",
-    content:
-      "Writing 'Hired by an Algorithm' taught me a lot about the intersection of data science and human resources.",
-    draft: true,
   },
 ];
 
