@@ -31,8 +31,8 @@ function GlitchText({
                 i === TARGET.length - 1
                   ? "var(--accent)"
                   : locked[i]
-                  ? "oklch(0.97 0.005 90)"
-                  : "oklch(0.35 0.01 270)",
+                    ? "oklch(0.97 0.005 90)"
+                    : "oklch(0.35 0.01 270)",
               transition: "color 80ms",
             }}
           >
@@ -46,7 +46,7 @@ function GlitchText({
 
 export function Loader({ onComplete }: { onComplete: () => void }) {
   const [displayed, setDisplayed] = useState<string[]>(() =>
-    TARGET.map(randomTarget)
+    TARGET.map(randomTarget),
   );
   const [locked, setLocked] = useState<boolean[]>(TARGET.map(() => false));
   const [exit, setExit] = useState(false);
@@ -56,9 +56,7 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     const scramble = () => {
       setDisplayed((prev) =>
-        prev.map((_, i) =>
-          lockedRef.current[i] ? TARGET[i] : randomTarget()
-        )
+        prev.map((_, i) => (lockedRef.current[i] ? TARGET[i] : randomTarget())),
       );
       timerRef.current = setTimeout(scramble, 50);
     };
@@ -103,7 +101,7 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
   return (
     <AnimatePresence onExitComplete={onComplete}>
       {!exit && (
-        <div className="fixed inset-0 z-[9999] bg-background pointer-events-none">
+        <div className="pointer-events-none fixed inset-0 z-[9999] bg-background">
           <motion.div
             key="top"
             custom={-1}
@@ -137,12 +135,8 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
               <GlitchText displayed={displayed} locked={locked} />
             </div>
           </motion.div>
-          
-          <div className="fixed inset-0 z-[10000] pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmYiLz48L3N2Zz4=')] bg-[length:100%_4px]" />
         </div>
       )}
     </AnimatePresence>
   );
 }
-
-

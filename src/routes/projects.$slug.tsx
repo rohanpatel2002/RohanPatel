@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { projects, type Project } from "@/lib/data";
+import { getPostsByProject } from "@/lib/posts";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
-import { Reveal, Magnetic, ScrambleText } from "@/components/Motion";
+import { Reveal, Magnetic } from "@/components/Motion";
 import {
   motion,
   useMotionTemplate,
   useMotionValue,
   useScroll,
-  useSpring,
   useTransform,
   AnimatePresence,
 } from "framer-motion";
@@ -58,6 +58,7 @@ const CHAPTERS = [
 
 function ProjectPage() {
   const { project, prev, next, index, total } = Route.useLoaderData();
+  const relatedWriting = getPostsByProject(project.slug);
   const outbound = project.repoUrl || project.productUrl;
   const outboundLabel = project.repoUrl
     ? "View on GitHub"
@@ -77,9 +78,9 @@ function ProjectPage() {
     target: pageRef,
     offset: ["start start", "end end"],
   });
-  const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 32 });
-  const progressPct = useTransform(progress, (v) => `${Math.round(v * 100)}%`);
-  const progressWidth = useTransform(progress, [0, 1], ["0%", "100%"]);
+  // Direct mapping — springing scroll progress lag feels like sticky/vibrating scroll.
+  const progressPct = useTransform(scrollYProgress, (v) => `${Math.round(v * 100)}%`);
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const onMove = useCallback(
     (e: ReactMouseEvent) => {
@@ -160,10 +161,7 @@ function ProjectPage() {
                 <>
                   <span className="text-border">·</span>
                   <span className="inline-flex items-center gap-2">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-                    </span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                     {project.status}
                   </span>
                 </>
@@ -186,7 +184,7 @@ function ProjectPage() {
               animate={{ y: 0 }}
               transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
             >
-              <ScrambleText text={project.name.toUpperCase()} />
+              {project.name.toUpperCase()}
               <span className="text-accent">.</span>
             </motion.span>
           </h1>
@@ -271,7 +269,7 @@ function ProjectPage() {
                 Interactive lens
               </p>
               <h2 className="mt-3 font-display text-4xl uppercase sm:text-5xl md:text-6xl">
-                <ScrambleText text="PROBLEM → SOLUTION" />
+                PROBLEM → SOLUTION
               </h2>
               <p className="mt-3 max-w-lg text-sm text-muted-foreground">
                 Drag the handle right to reveal the solution over the problem.
@@ -285,17 +283,26 @@ function ProjectPage() {
             </Reveal>
 
             {project.outcomes && project.outcomes.length > 0 && (
-              <div className="mt-14 grid gap-8 sm:grid-cols-3">
+              <div className="mt-14 grid gap-4 sm:grid-cols-3 sm:gap-5">
                 {project.outcomes.map((item, i) => (
                   <Reveal key={item} delay={i * 0.07}>
-                    <div className="border-t-2 border-foreground pt-6 transition-colors hover:border-accent">
-                      <span className="font-display text-4xl text-accent/25 sm:text-5xl">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                    <article className="group relative h-full overflow-hidden rounded-3xl border border-border/80 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/35 hover:shadow-lg hover:shadow-accent/5 sm:p-7">
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent/0 via-transparent to-accent/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      />
+                      <div className="relative flex items-start justify-between gap-3">
+                        <span className="font-display text-5xl leading-none text-accent/20 transition-colors group-hover:text-accent/40">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="rounded-full border border-accent/20 bg-accent/[0.06] px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-accent">
+                          Result
+                        </span>
+                      </div>
+                      <p className="relative mt-5 text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground sm:text-[15px]">
                         {item}
                       </p>
-                    </div>
+                    </article>
                   </Reveal>
                 ))}
               </div>
@@ -303,24 +310,23 @@ function ProjectPage() {
           </section>
         )}
 
-        {/* ── TAPE: horizontal film-strip architecture ── */}
         {project.architecture && project.architecture.length > 0 && (
-          <section id="tape" className="!max-w-none relative left-1/2 w-screen -translate-x-1/2">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6">
-              <Reveal>
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                  Film strip · scroll sideways
-                </p>
-                <h2 className="mt-3 font-display text-4xl uppercase sm:text-5xl md:text-6xl">
-                  <ScrambleText text="HOW IT RUNS" />
-                </h2>
-              </Reveal>
-            </div>
+          <section id="tape">
+            <Reveal>
+              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                Execution flow
+              </p>
+              <h2 className="mt-3 font-display text-4xl uppercase sm:text-5xl md:text-6xl">
+                HOW IT RUNS
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                End-to-end flow from trigger to decision output.
+              </p>
+            </Reveal>
             <ArchitectureTape steps={project.architecture} />
           </section>
         )}
 
-        {/* Highlights */}
         {project.highlights && project.highlights.length > 0 && (
           <section>
             <Reveal>
@@ -328,24 +334,48 @@ function ProjectPage() {
                 Capabilities
               </p>
               <h2 className="mt-3 font-display text-4xl uppercase sm:text-5xl md:text-6xl">
-                <ScrambleText text="WHAT IT CATCHES" />
+                WHAT IT CATCHES
               </h2>
             </Reveal>
-            <ul className="mt-12">
-              {project.highlights.map((item, i) => (
-                <Reveal key={item} delay={i * 0.04}>
-                  <li className="group relative flex items-start gap-5 overflow-hidden border-t border-border py-7 sm:gap-8 sm:py-8">
-                    <span className="absolute inset-0 -translate-x-full bg-accent/[0.05] transition-transform duration-500 group-hover:translate-x-0" />
-                    <span className="relative font-display text-3xl text-foreground/10 transition-colors group-hover:text-accent sm:text-4xl">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <p className="relative pt-1 text-base leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground sm:text-lg">
-                      {item}
-                    </p>
-                  </li>
-                </Reveal>
-              ))}
-            </ul>
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5">
+              {project.highlights.map((item, i) => {
+                const [title, ...rest] = item.split(":");
+                const body = rest.length ? rest.join(":").trim() : null;
+                return (
+                  <Reveal key={item} delay={Math.min(i * 0.05, 0.2)}>
+                    <article className="group relative h-full overflow-hidden rounded-3xl border border-border/80 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/35 hover:shadow-lg hover:shadow-accent/5 sm:p-8">
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute right-5 top-4 font-display text-5xl leading-none text-foreground/[0.06] transition-colors group-hover:text-accent/15 sm:right-6 sm:top-5 sm:text-6xl"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div
+                        aria-hidden
+                        className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100"
+                      />
+                      <span className="relative font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                        Signal {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {body ? (
+                        <>
+                          <h3 className="relative mt-3 max-w-[85%] font-display text-2xl leading-[0.95] sm:text-3xl">
+                            {title.trim()}
+                          </h3>
+                          <p className="relative mt-3 text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground sm:text-[15px]">
+                            {body}
+                          </p>
+                        </>
+                      ) : (
+                        <p className="relative mt-3 max-w-[90%] text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground sm:text-[15px]">
+                          {item}
+                        </p>
+                      )}
+                    </article>
+                  </Reveal>
+                );
+              })}
+            </div>
           </section>
         )}
 
@@ -357,7 +387,7 @@ function ProjectPage() {
                 Pin a layer
               </p>
               <h2 className="mt-3 font-display text-4xl uppercase sm:text-5xl md:text-6xl">
-                <ScrambleText text="STACK MATRIX" />
+                STACK MATRIX
               </h2>
               <p className="mt-3 text-sm text-muted-foreground">
                 Click a layer to isolate it — {project.meta}
@@ -410,7 +440,7 @@ function ProjectPage() {
                 Live signal
               </p>
               <h2 className="mt-3 font-display text-4xl uppercase sm:text-5xl md:text-6xl">
-                <ScrambleText text="CORE LOGIC" />
+                CORE LOGIC
               </h2>
             </Reveal>
             <TypewriterCode slug={project.slug} code={project.codeSnippet} />
@@ -457,6 +487,36 @@ function ProjectPage() {
                     <ArrowUpRight size={16} />
                   </a>
                 </Magnetic>
+              </div>
+            </div>
+          </Reveal>
+        )}
+
+        {relatedWriting.length > 0 && (
+          <Reveal>
+            <div className="mb-14 border-t border-border pt-14">
+              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+                Related writing
+              </p>
+              <div className="mt-6 divide-y divide-border border-y border-border">
+                {relatedWriting.map((p) => (
+                  <Link
+                    key={p.slug}
+                    to="/blog/$slug"
+                    params={{ slug: p.slug }}
+                    className="group flex flex-col gap-2 py-5 sm:flex-row sm:items-baseline sm:justify-between"
+                  >
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
+                        {p.tag}
+                      </p>
+                      <p className="mt-1 font-display text-2xl transition-colors group-hover:text-accent sm:text-3xl">
+                        {p.title}
+                      </p>
+                    </div>
+                    <span className="text-sm font-semibold">Read →</span>
+                  </Link>
+                ))}
               </div>
             </div>
           </Reveal>
@@ -579,7 +639,6 @@ function CompareLens({
 
       <div
         ref={ref}
-        data-lenis-prevent
         className="relative min-h-[300px] touch-none rounded-[1.75rem] border border-border bg-background sm:min-h-[340px]"
         style={{ touchAction: "none" }}
         onPointerDown={startDrag}
@@ -639,50 +698,44 @@ function CompareLens({
   );
 }
 
-/** Full-bleed horizontal film strip for architecture. */
+/** Timeline-style flow with connected steps. */
 function ArchitectureTape({ steps }: { steps: string[] }) {
-  const scroller = useRef<HTMLDivElement>(null);
-
   return (
-    <div className="mt-10">
+    <ol className="relative mt-12 space-y-0">
       <div
-        ref={scroller}
-        className="flex gap-4 overflow-x-auto px-[max(1rem,calc((100vw-72rem)/2+1.5rem))] pb-4 snap-x snap-mandatory scrollbar-thin"
-        style={{ scrollbarWidth: "thin" }}
-      >
-        {steps.map((step, i) => (
-          <motion.article
-            key={step}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, inline: "center" }}
-            transition={{ delay: i * 0.05 }}
-            className="group relative w-[min(78vw,320px)] shrink-0 snap-center overflow-hidden rounded-3xl border border-border bg-card p-6 sm:w-[300px] sm:p-7"
-          >
-            <div className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-accent transition-transform duration-500 group-hover:scale-x-100" />
-            <div className="flex items-baseline justify-between">
-              <span className="font-display text-5xl text-foreground/[0.07]">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="font-mono text-[10px] text-accent">
-                FRAME {i + 1}
-              </span>
+        aria-hidden
+        className="absolute bottom-6 left-[1.35rem] top-6 w-px bg-gradient-to-b from-accent/50 via-border to-border sm:left-[1.6rem]"
+      />
+      {steps.map((step, i) => (
+        <motion.li
+          key={step}
+          initial={{ opacity: 0, x: -12 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: i * 0.05 }}
+          className="group relative flex gap-4 pb-4 last:pb-0 sm:gap-6 sm:pb-5"
+        >
+          <span className="relative z-[1] mt-5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-background font-mono text-[11px] text-accent shadow-sm transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground sm:mt-6 sm:h-12 sm:w-12">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <article className="min-w-0 flex-1 overflow-hidden rounded-2xl border border-border/80 bg-card p-5 shadow-sm transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-accent/35 group-hover:shadow-md group-hover:shadow-accent/5 sm:p-6">
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">
+                Step {i + 1} of {steps.length}
+              </p>
+              {i === steps.length - 1 && (
+                <span className="rounded-full bg-accent/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.15em] text-accent">
+                  Output
+                </span>
+              )}
             </div>
-            <p className="mt-8 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground sm:text-[15px]">
               {step}
             </p>
-            {i < steps.length - 1 && (
-              <span className="absolute -right-3 top-1/2 hidden -translate-y-1/2 text-accent/40 sm:block">
-                →
-              </span>
-            )}
-          </motion.article>
-        ))}
-      </div>
-      <p className="mt-3 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground md:hidden">
-        Swipe the tape →
-      </p>
-    </div>
+          </article>
+        </motion.li>
+      ))}
+    </ol>
   );
 }
 
