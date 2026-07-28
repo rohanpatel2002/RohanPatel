@@ -3,21 +3,19 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { cloudflare } from "@cloudflare/vite-plugin";
+import { nitro } from "nitro/vite";
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
   plugins: [
-    tanstackStart({
-      server: { entry: "src/server.ts" },
-    }),
+    tanstackStart(),
+    nitro(),
     react(),
     tailwindcss(),
     tsconfigPaths(),
-    mode === "production" ? cloudflare() : null,
-  ].filter(Boolean),
+  ],
   resolve: {
     alias: {
       "@": "/src",
     },
   },
-}));
+});
