@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://rohanpatel.dev/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://rohanpatel.dev/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rohanpatel.dev/projects</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://rohanpatel.dev/projects/ironclad</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rohanpatel.dev/projects/docentra</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rohanpatel.dev/projects/tribunal</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rohanpatel.dev/projects/hired-by-algorithm</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rohanpatel.dev/resume</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rohanpatel.dev/blog</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/eval-harnesses-before-prompt-tweaks</loc><lastmod>2026-07-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/tool-calls-need-contracts</loc><lastmod>2026-07-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/idempotency-keys-are-product</loc><lastmod>2026-06-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/bff-keeps-fullstack-honest</loc><lastmod>2026-06-14</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/slos-before-more-dashboards</loc><lastmod>2026-06-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/deployment-gates-read-incidents</loc><lastmod>2026-05-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/blast-radius-as-a-product-feature</loc><lastmod>2026-05-04</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/ci-that-asks-should-we</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/ai-reviewing-ai</loc><lastmod>2026-04-12</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/topology-aware-code-review</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/rag-in-multi-tenant-production</loc><lastmod>2026-03-14</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/semantic-search-go-pgvector</loc><lastmod>2026-02-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/multi-tenant-postgres-rls</loc><lastmod>2026-02-16</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/compliance-engines-in-go</loc><lastmod>2026-02-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/offline-first-field-apps</loc><lastmod>2026-01-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/ambiguous-briefs-forward-deployed</loc><lastmod>2026-01-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/hired-by-an-algorithm-lessons</loc><lastmod>2025-12-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rohanpatel.dev/blog/scientific-software-stokes-maps</loc><lastmod>2025-12-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+</urlset>
