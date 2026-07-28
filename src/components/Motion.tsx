@@ -164,7 +164,7 @@ export function Tilt({ children, intensity = 15 }: { children: ReactNode; intens
   );
 }
 
-/** Scale settle — shrink out, grow into place. */
+/** Instant route swap — no exit wait (that kept the old page on screen). */
 export function PageTransition({
   children,
   routeKey,
@@ -173,18 +173,14 @@ export function PageTransition({
   routeKey: string;
 }) {
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={routeKey}
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.98 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        style={{ transformOrigin: "50% 20%" }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={routeKey}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
   );
 }
 

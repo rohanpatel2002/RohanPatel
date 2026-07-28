@@ -30,7 +30,7 @@ export function personJsonLd() {
       "@type": "PostalAddress",
       addressLocality: site.location,
     },
-    sameAs: [site.github, site.linkedin, site.orcid, site.book],
+    sameAs: [site.github, site.linkedin, site.instagram, site.orcid, site.book],
   };
 }
 

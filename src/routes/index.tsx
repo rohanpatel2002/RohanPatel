@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Software Engineer building production systems from interface to infrastructure. Open to SWE/SDE, full-stack, DevOps, forward-deployed, and AI roles. Author of Hired by an Algorithm.",
+          "Software Engineer building production systems from interface to infrastructure. Author of Hired by an Algorithm.",
       },
     ],
   }),
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/")({
 
 function Hero() {
   const [index, setIndex] = useState(0);
+  const [tilt, setTilt] = useState(false);
   const words = ["RESILIENT", "SCALABLE", "ROBUST", "ELEGANT"];
   const { open } = useContactModal();
 
@@ -43,6 +44,14 @@ function Hero() {
       2500,
     );
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const sync = () => setTilt(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
   }, []);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -67,6 +76,7 @@ function Hero() {
   );
 
   const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
+    if (!tilt) return;
     const r = e.currentTarget.getBoundingClientRect();
     mouseX.set((e.clientX - r.left) / r.width - 0.5);
     mouseY.set((e.clientY - r.top) / r.height - 0.5);
@@ -79,10 +89,10 @@ function Hero() {
   return (
     <section
       ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative flex min-h-[100svh] items-start justify-center overflow-hidden px-4 pt-6 sm:pt-8"
-      style={{ perspective: "1200px" }}
+      onMouseMove={tilt ? handleMouseMove : undefined}
+      onMouseLeave={tilt ? handleMouseLeave : undefined}
+      className="relative flex min-h-[calc(100svh-4.75rem)] flex-col overflow-hidden px-3 pb-6 pt-8 sm:min-h-[100svh] sm:px-4 sm:pb-0 sm:pt-8"
+      style={tilt ? { perspective: "1200px" } : undefined}
     >
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -92,19 +102,23 @@ function Hero() {
       </div>
 
       <motion.div
-        style={{ y, opacity, scale, rotateX, rotateY }}
-        className="relative z-10 pb-28 text-center sm:pb-36"
+        style={
+          tilt
+            ? { y, opacity, scale, rotateX, rotateY }
+            : { opacity }
+        }
+        className="relative z-10 flex flex-1 flex-col justify-between text-center sm:block sm:flex-none sm:justify-start sm:pb-36"
       >
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-xs font-semibold tracking-[0.3em] text-muted-foreground"
+          className="text-[10px] font-semibold tracking-[0.18em] text-muted-foreground sm:text-xs sm:tracking-[0.3em]"
         >
           [ ROHAN PATEL — SOFTWARE ENGINEER ]
         </motion.p>
 
-        <h1 className="relative mt-6 font-display text-[15vw] leading-[0.9] sm:text-[14vw] md:text-[12vw]">
+        <h1 className="relative flex w-full flex-col gap-1 font-display text-[min(24vw,11vh)] !leading-none tracking-[-0.03em] sm:mt-6 sm:gap-0 sm:text-[14vw] sm:!leading-[0.9] sm:tracking-normal md:text-[12vw]">
           <div
             aria-hidden
             className="pointer-events-none absolute rounded-full bg-accent/25 blur-[80px]"
@@ -130,7 +144,7 @@ function Hero() {
           </span>
 
           <span
-            className="relative block h-[0.9em] overflow-hidden"
+            className="relative block h-[1em] overflow-hidden sm:h-[0.9em]"
             style={{ zIndex: 5 }}
           >
             <AnimatePresence mode="wait">
@@ -174,40 +188,41 @@ function Hero() {
           </span>
         </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
-          className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg"
-        >
-          {site.summary}
-        </motion.p>
+        <div className="sm:contents">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            className="mx-auto max-w-[22rem] text-[15px] leading-snug text-muted-foreground sm:mt-8 sm:max-w-2xl sm:text-lg sm:leading-relaxed"
+          >
+            {site.summary}
+          </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.25, duration: 0.6 }}
-          className="mt-8 flex flex-wrap items-center justify-center gap-3"
-        >
-          <Magnetic>
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
-            >
-              View selected work
-            </a>
-          </Magnetic>
-          <Magnetic>
-            <button
-              onClick={open}
-              className="inline-flex items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-muted"
-            >
-              Contact me
-            </button>
-          </Magnetic>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.25, duration: 0.6 }}
+            className="mt-4 flex flex-col items-stretch gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3"
+          >
+            <Magnetic>
+              <Link
+                to="/about"
+                className="inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground sm:w-auto sm:py-3"
+              >
+                About me
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <button
+                onClick={open}
+                className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-3.5 text-sm font-semibold transition-colors hover:bg-muted sm:w-auto sm:py-3"
+              >
+                Contact me
+              </button>
+            </Magnetic>
+          </motion.div>
+        </div>
       </motion.div>
-
     </section>
   );
 }
@@ -388,7 +403,7 @@ function Index() {
       <Hero />
 
       {/* ABOUT */}
-      <section id="about" className="px-4 pt-20 sm:px-6 sm:pt-28">
+      <section id="about" className="px-4 pt-12 sm:px-6 sm:pt-28">
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">
@@ -396,30 +411,29 @@ function Index() {
             </p>
           </Reveal>
 
-          <div className="mt-6 grid items-start gap-8 md:grid-cols-12 md:gap-12 lg:gap-16">
-            <div className="md:col-span-5">
-              <WordReveal
-                text="Engineer first."
-                className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
-              />
-              <Reveal delay={0.15}>
-                <p className="mt-5 max-w-xs text-sm font-light leading-relaxed text-muted-foreground">
-                  Building systems that stay reliable under pressure — from
-                  interface to infrastructure.
-                </p>
-              </Reveal>
-            </div>
+          <WordReveal
+            text="Systems that hold."
+            className="mt-5 font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem]"
+          />
 
+          <Reveal delay={0.12}>
+            <p className="mt-4 max-w-xl text-sm font-light leading-relaxed text-muted-foreground sm:text-base">
+              Building systems that stay reliable under pressure — from
+              interface to infrastructure.
+            </p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-10 border-t border-border pt-10 md:grid-cols-12 md:gap-12 md:pt-12">
             <div className="md:col-span-7">
-              <Reveal delay={0.2}>
+              <Reveal delay={0.18}>
                 <p className="text-base font-light leading-[1.75] text-muted-foreground sm:text-lg sm:leading-[1.7]">
-                  Currently building at{" "}
+                Built at{" "}
+                <span className="font-medium text-foreground">
+                  Praalak Tech Solutions
+                </span>{" "}
+                and contributed research software at the{" "}
                   <span className="font-medium text-foreground">
-                    Praalak Tech Solutions
-                  </span>{" "}
-                  and contributing research software at the{" "}
-                  <span className="font-medium text-foreground">
-                    Physical Research Laboratory
+                    Physical Research Laboratory [PRL, ISRO]
                   </span>
                   . I care about the parts most people skip — data models,
                   failure modes, and the shape of the API — whether the work is
@@ -427,36 +441,40 @@ function Index() {
                   beside the people who use it.
                 </p>
 
-                <div className="mt-8 grid gap-4 border-y border-border py-6 sm:grid-cols-2">
+                <Link
+                  to="/about"
+                  className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-accent transition-colors hover:text-foreground"
+                >
+                  More about me
+                  <span aria-hidden>→</span>
+                </Link>
+              </Reveal>
+            </div>
+
+            <div className="md:col-span-5">
+              <Reveal delay={0.24}>
+                <div className="flex flex-col gap-8 md:border-l md:border-border md:pl-10">
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
-                      Now
-                    </p>
-                    <p className="mt-2 text-sm text-foreground">
+                    <p className="text-sm text-foreground">
                       Software Engineer · Praalak
                     </p>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Research SWE Intern · PRL
+                      Research Software Engineer Intern · PRL
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Open source · Grafana · Supabase · Ollama
                     </p>
                   </div>
                   <div>
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">
                       Focus
                     </p>
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       Full-stack · Backend · DevOps · Applied AI ·
                       Forward-deployed delivery
                     </p>
                   </div>
                 </div>
-
-                <Link
-                  to="/about"
-                  className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-accent transition-colors hover:text-foreground"
-                >
-                  More about me
-                  <span aria-hidden>→</span>
-                </Link>
               </Reveal>
             </div>
           </div>
@@ -614,7 +632,7 @@ function Index() {
               something<span className="text-accent">.</span>
             </h2>
             <p className="relative mt-4 max-w-xl text-sm opacity-80 sm:text-base">
-              {site.availability}
+              {site.tagline}
             </p>
             <div className="relative mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4">
               <Magnetic>
@@ -624,26 +642,6 @@ function Index() {
                 >
                   Get in touch
                 </button>
-              </Magnetic>
-              <Magnetic>
-                <a
-                  href={site.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base"
-                >
-                  LinkedIn
-                </a>
-              </Magnetic>
-              <Magnetic>
-                <a
-                  href={site.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-primary-foreground/30 px-5 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-foreground/10 sm:px-7 sm:py-3 sm:text-base"
-                >
-                  GitHub
-                </a>
               </Magnetic>
             </div>
           </div>
