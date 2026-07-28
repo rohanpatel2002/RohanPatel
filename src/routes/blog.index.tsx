@@ -23,6 +23,13 @@ export const Route = createFileRoute("/blog/")({
   component: BlogIndex,
 });
 
+/** Phone chip labels — keep full name in aria-label / desktop. */
+function shortTag(t: PostTag | "All") {
+  if (t === "Product / Delivery") return "Product";
+  if (t === "Systems / DevOps") return "Systems";
+  return t;
+}
+
 function BlogIndex() {
   const [tag, setTag] = useState<PostTag | "All">("All");
   const filtered = useMemo(
@@ -53,13 +60,13 @@ function BlogIndex() {
             />
           </div>
 
-          {/* Topic filter */}
+          {/* Topic filter — phone: 2-col grid; sm+: wrap chips */}
           <Reveal delay={0.25}>
             <div className="mt-10 flex justify-center">
               <div
                 role="tablist"
                 aria-label="Filter essays by topic"
-                className="inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-2xl border border-border/70 bg-card/80 p-1.5 shadow-sm backdrop-blur-sm"
+                className="grid w-full max-w-sm grid-cols-2 gap-1.5 rounded-2xl border border-border/70 bg-card/80 p-2 shadow-sm backdrop-blur-sm sm:inline-flex sm:w-auto sm:max-w-full sm:flex-wrap sm:items-center sm:justify-center sm:gap-1 sm:p-1.5"
               >
                 {(["All", ...allTags] as const).map((t) => {
                   const on = tag === t;
@@ -68,15 +75,19 @@ function BlogIndex() {
                       key={t}
                       type="button"
                       role="tab"
+                      aria-label={t}
                       aria-selected={on}
                       onClick={() => setTag(t)}
-                      className={`rounded-xl px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] transition-colors duration-200 sm:px-3.5 sm:py-2.5 ${
+                      className={`rounded-xl px-2.5 py-2.5 text-center font-mono text-[10px] uppercase tracking-[0.14em] transition-colors duration-200 sm:px-3.5 sm:py-2.5 sm:tracking-[0.16em] ${
+                        t === "All" ? "col-span-2 sm:col-span-1" : ""
+                      } ${
                         on
                           ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                          : "bg-muted/40 text-muted-foreground hover:bg-muted/60 hover:text-foreground sm:bg-transparent"
                       }`}
                     >
-                      {t}
+                      <span className="sm:hidden">{shortTag(t)}</span>
+                      <span className="hidden sm:inline">{t}</span>
                     </button>
                   );
                 })}

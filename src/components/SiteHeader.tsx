@@ -3,10 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { useContactModal } from "@/hooks/use-contact-modal";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Github, Linkedin, Instagram } from "lucide-react";
 import { site } from "@/lib/site";
 
 const links: { label: string; to: string }[] = [
+  { label: "Studio", to: "/" },
   { label: "Work", to: "/projects" },
   { label: "About", to: "/about" },
   { label: "Writing", to: "/blog" },
@@ -34,7 +35,7 @@ export function SiteHeader() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="sticky top-3 z-50 mx-3 sm:top-4 sm:mx-6 md:mx-8"
+      className="relative sticky top-3 z-50 mx-3 sm:top-4 sm:mx-6 md:mx-8"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-border bg-card/80 px-4 py-1.5 shadow-sm backdrop-blur-md sm:px-5 sm:py-2">
         <Link
@@ -96,7 +97,7 @@ export function SiteHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="mt-2 overflow-hidden rounded-2xl border border-border bg-card/95 p-3 backdrop-blur-md md:hidden"
+            className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-border bg-card/95 p-3 shadow-lg backdrop-blur-md md:hidden"
           >
             <nav className="flex flex-col">
               {links.map((l) => (
@@ -136,23 +137,19 @@ export function SiteHeader() {
 export function SiteFooter() {
   const { open: openContact } = useContactModal();
   const socials = [
-    { label: "GitHub", href: site.github },
-    { label: "LinkedIn", href: site.linkedin },
+    { label: "GitHub", href: site.github, Icon: Github },
+    { label: "LinkedIn", href: site.linkedin, Icon: Linkedin },
+    { label: "Instagram", href: site.instagram, Icon: Instagram },
   ];
 
   return (
     <footer className="relative mt-24 overflow-hidden sm:mt-32">
-      <div
-        className="relative z-20 bg-foreground px-6 pb-24 pt-16 text-background shadow-2xl md:px-12 md:pb-40 md:pt-24"
-        style={{
-          clipPath: "polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%)",
-        }}
-      >
+      <div className="footer-dark-clip relative z-20 bg-foreground px-6 pb-24 pt-16 text-background shadow-2xl md:px-12 md:pb-40 md:pt-24">
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+          <div className="flex flex-col items-center gap-10 text-center md:flex-row md:items-start md:justify-between md:text-left">
             <a
               href={`mailto:${site.email}`}
-              className="group flex flex-col items-start transition-all duration-700 hover:text-accent"
+              className="group flex flex-col items-center transition-all duration-700 hover:text-accent md:items-start"
             >
               <span className="mb-1 font-sans text-lg font-light uppercase tracking-[0.4em] text-background/40 transition-colors group-hover:text-accent/60 sm:text-xl md:text-2xl">
                 CONNECT
@@ -170,22 +167,23 @@ export function SiteFooter() {
               </span>
             </a>
 
-            <div className="flex flex-wrap gap-x-8 gap-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-background/50">
-              {socials.map((s) => (
+            <div className="flex items-center justify-center gap-3">
+              {socials.map(({ label, href, Icon }) => (
                 <a
-                  key={s.label}
-                  href={s.href}
+                  key={label}
+                  href={href}
                   target="_blank"
                   rel="noreferrer"
-                  className="transition-colors hover:text-background"
+                  aria-label={label}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-background/20 text-background/60 transition-colors hover:border-background/50 hover:text-background"
                 >
-                  {s.label}
+                  <Icon size={18} />
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="mt-20 flex flex-wrap gap-x-12 gap-y-6 font-mono text-xs uppercase tracking-[0.2em] text-background/60 md:mt-32">
+          <div className="mt-20 flex flex-wrap justify-center gap-x-12 gap-y-6 font-mono text-xs uppercase tracking-[0.2em] text-background/60 md:mt-32 md:justify-start">
             {links.map((l) => (
               <Link
                 key={l.label}
@@ -197,7 +195,7 @@ export function SiteFooter() {
             ))}
           </div>
 
-          <div className="mt-12 flex flex-col items-start justify-between gap-12 md:flex-row md:items-end">
+          <div className="mt-12 flex flex-col items-center justify-between gap-12 md:flex-row md:items-end">
             <button
               onClick={openContact}
               className="group relative inline-flex items-center justify-center bg-background px-14 py-5 text-[10px] font-bold uppercase tracking-[0.3em] text-foreground transition-all hover:bg-accent hover:text-background"
@@ -208,21 +206,26 @@ export function SiteFooter() {
               <span className="relative z-10">Let's talk</span>
             </button>
 
-            <div className="max-w-[280px] font-mono text-[9px] uppercase leading-relaxed tracking-[0.2em] text-background/40">
-              Based in {site.location} — {site.availability}
+            <div className="hidden max-w-[280px] font-mono text-[9px] uppercase leading-relaxed tracking-[0.2em] text-background/40 sm:block">
+              Based in {site.location}
             </div>
           </div>
+
+          <p className="mt-14 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-background/40 md:mt-20 md:text-left">
+            @{new Date().getFullYear()} Rohan Builds
+          </p>
         </div>
       </div>
 
-      <div className="pointer-events-none relative z-10 -mt-16 select-none overflow-hidden bg-background pb-8 pt-32 sm:-mt-32">
+      {/* Wordmark — cream + outline; cropped like desktop on both */}
+      <div className="pointer-events-none relative z-10 select-none overflow-hidden bg-background py-3 sm:-mt-32 sm:py-0 sm:pb-8 sm:pt-32">
         <motion.div
-          initial={{ y: 60, opacity: 0 }}
+          initial={{ y: 40, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center font-display text-[35vw] font-black uppercase leading-[0.7] tracking-[-0.05em] text-transparent opacity-80"
-          style={{ WebkitTextStroke: "2px var(--color-foreground)" }}
+          className="footer-rohan text-center font-display text-[38vw] font-black uppercase leading-[0.62] tracking-[-0.05em] opacity-80 sm:-my-[0.12em] sm:text-[35vw] sm:leading-[0.7]"
+          aria-hidden
         >
           ROHAN
         </motion.div>

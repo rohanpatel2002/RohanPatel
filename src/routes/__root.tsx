@@ -9,7 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import Lenis from "lenis";
 
 import appCss from "../styles.css?url";
@@ -20,7 +20,7 @@ import { jsonLdScript, pageSeo, personJsonLd } from "@/lib/seo";
 const rootSeo = pageSeo({
   title: "Rohan Patel — Software Engineer | Full-Stack, DevOps & Applied AI",
   description:
-    "Software Engineer building production systems from interface to infrastructure. Open to SWE/SDE, full-stack, DevOps, forward-deployed, and AI roles. Author of Hired by an Algorithm.",
+    "Software Engineer building production systems from interface to infrastructure. Author of Hired by an Algorithm.",
   path: "/",
 });
 
@@ -108,9 +108,18 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const [loaded, setLoaded] = useState(false);
   const { isOpen, close } = useContactModal();
+  const router = useRouter();
 
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const lenisRef = useRef<Lenis | null>(null);
+
+  const jumpTop = () => {
+    lenisRef.current?.scrollTo(0, { immediate: true });
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
 
   // Lenis drives smooth scroll; we use its own RAF loop (not framer's) to avoid
   // double-ticking. Framer's useScroll reads native scrollY directly — Lenis
@@ -125,9 +134,8 @@ function RootComponent() {
       touchMultiplier: 1.5,
       infinite: false,
     });
+    lenisRef.current = lenis;
 
-    // Tell Framer Motion's scroll tracker to read from Lenis virtual scroll
-    // by dispatching a synthetic scroll event each frame.
     let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
@@ -138,8 +146,23 @@ function RootComponent() {
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, [loaded]);
+
+  // Reset scroll as soon as navigation starts — before the new page paints.
+  useEffect(() => {
+    if (!loaded) return;
+    const unsub = router.subscribe("onBeforeNavigate", ({ pathChanged }) => {
+      if (pathChanged) jumpTop();
+    });
+    return unsub;
+  }, [router, loaded]);
+
+  useLayoutEffect(() => {
+    if (!loaded) return;
+    jumpTop();
+  }, [currentPath, loaded]);
 
   const handleLoaderComplete = () => setLoaded(true);
 
