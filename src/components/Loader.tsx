@@ -19,11 +19,12 @@ function GlitchText({
 }) {
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-[0.01em]">
+      {/* Anton ink sits outside leading-none; pad so panel overflow-hidden doesn't flat-top the glyphs */}
+      <div className="flex items-center gap-[0.01em] py-[0.12em]">
         {displayed.map((ch, i) => (
           <span
             key={i}
-            className="inline-block font-display leading-none text-[18vw] sm:text-[13vw]"
+            className="inline-block font-display text-[18vw] leading-[0.95] sm:text-[13vw]"
             style={{
               fontFamily: "Anton, Impact, system-ui, sans-serif",
               textTransform: "uppercase",
