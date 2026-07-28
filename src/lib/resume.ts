@@ -21,7 +21,7 @@ export const resume = {
   location: "Vadodara, Gujarat, India",
   phone: "+91 63532 23860",
   summary:
-    "Software Engineer specializing in infrastructure, distributed systems, and cloud-native applications. Core contributor to three production platforms and an enterprise compliance system at Praalak Tech Solutions; independently architected and shipped platforms for freelance clients. Author of two peer-reviewed ML papers.",
+    "Software Engineer specializing in infrastructure, distributed systems, and cloud-native applications. Core contributor to three production platforms and an enterprise compliance system at Praalak Tech Solutions; independently architected and shipped platforms for freelance clients. Open-source contributor to Grafana, Supabase, and Ollama. Author of two peer-reviewed ML papers.",
   skills: [
     {
       group: "Languages",

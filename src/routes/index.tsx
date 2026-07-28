@@ -461,6 +461,9 @@ function Index() {
                     <p className="mt-1 text-sm text-muted-foreground">
                       Research Software Engineer Intern · PRL
                     </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Open source · Grafana · Supabase · Ollama
+                    </p>
                   </div>
                   <div>
                     <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent">

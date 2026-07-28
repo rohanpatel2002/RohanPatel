@@ -226,7 +226,8 @@ function About() {
               </span>
               — scientific pipelines and analysis tooling for polarization
               camera telemetry. Alongside that I have shipped freelance
-              platforms end to end, authored two peer-reviewed ML papers, and
+              platforms end to end, contributed to open source at Grafana,
+              Supabase, and Ollama, authored two peer-reviewed ML papers, and
               wrote{" "}
               <a
                 href={site.book}
