@@ -18,29 +18,26 @@ function GlitchText({
   locked: boolean[];
 }) {
   return (
-    <div className="flex flex-col items-center gap-4">
-      {/* Anton ink sits outside leading-none; pad so panel overflow-hidden doesn't flat-top the glyphs */}
-      <div className="flex items-center gap-[0.01em] py-[0.12em]">
-        {displayed.map((ch, i) => (
-          <span
-            key={i}
-            className="inline-block font-display text-[18vw] leading-[0.95] sm:text-[13vw]"
-            style={{
-              fontFamily: "Anton, Impact, system-ui, sans-serif",
-              textTransform: "uppercase",
-              color:
-                i === TARGET.length - 1
-                  ? "var(--accent)"
-                  : locked[i]
-                    ? "oklch(0.97 0.005 90)"
-                    : "oklch(0.35 0.01 270)",
-              transition: "color 80ms",
-            }}
-          >
-            {ch}
-          </span>
-        ))}
-      </div>
+    <div className="flex items-center gap-[0.01em]">
+      {displayed.map((ch, i) => (
+        <span
+          key={i}
+          className="inline-block font-display text-[18vw] leading-none sm:text-[13vw]"
+          style={{
+            fontFamily: "Anton, Impact, system-ui, sans-serif",
+            textTransform: "uppercase",
+            color:
+              i === TARGET.length - 1
+                ? "var(--accent)"
+                : locked[i]
+                  ? "oklch(0.97 0.005 90)"
+                  : "oklch(0.35 0.01 270)",
+            transition: "color 80ms",
+          }}
+        >
+          {ch}
+        </span>
+      ))}
     </div>
   );
 }
@@ -94,30 +91,30 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
       transition: {
         duration: 1.1,
         delay: dir === 1 ? 0.08 : 0,
-        ease: [0.65, 0, 0.35, 1],
+        ease: [0.65, 0, 0.35, 1] as const,
       },
     }),
   };
 
+  // Full-viewport layers + clip-path (not 50vh overflow boxes) so both
+  // halves share the same text center — avoids mobile vh seam clipping.
+  const layer =
+    "pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center bg-[oklch(0.1_0.005_270)]";
+
   return (
     <AnimatePresence onExitComplete={onComplete}>
       {!exit && (
-        <div className="pointer-events-none fixed inset-0 z-[9999] bg-background">
+        <>
           <motion.div
             key="top"
             custom={-1}
             variants={panel}
             initial="initial"
             exit="exit"
-            className="fixed inset-x-0 top-0 z-[9999] overflow-hidden bg-[oklch(0.1_0.005_270)]"
-            style={{ height: "50vh" }}
+            className={layer}
+            style={{ clipPath: "inset(0 0 50% 0)" }}
           >
-            <div
-              className="absolute inset-x-0 flex items-center justify-center"
-              style={{ top: 0, height: "100vh" }}
-            >
-              <GlitchText displayed={displayed} locked={locked} />
-            </div>
+            <GlitchText displayed={displayed} locked={locked} />
           </motion.div>
 
           <motion.div
@@ -126,17 +123,12 @@ export function Loader({ onComplete }: { onComplete: () => void }) {
             variants={panel}
             initial="initial"
             exit="exit"
-            className="fixed inset-x-0 bottom-0 z-[9999] overflow-hidden bg-[oklch(0.1_0.005_270)]"
-            style={{ height: "50vh" }}
+            className={layer}
+            style={{ clipPath: "inset(50% 0 0 0)" }}
           >
-            <div
-              className="absolute inset-x-0 flex items-center justify-center"
-              style={{ top: "-50vh", height: "100vh" }}
-            >
-              <GlitchText displayed={displayed} locked={locked} />
-            </div>
+            <GlitchText displayed={displayed} locked={locked} />
           </motion.div>
-        </div>
+        </>
       )}
     </AnimatePresence>
   );
