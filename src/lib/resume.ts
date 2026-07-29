@@ -66,6 +66,7 @@ export const resume = {
       group: "Cloud & DevOps",
       items: [
         "Docker",
+        "Terraform",
         "Git",
         "GitHub",
         "GitHub Actions",
