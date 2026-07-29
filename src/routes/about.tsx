@@ -177,7 +177,7 @@ function About() {
 
       {/* Hero */}
       <section className="px-4 pt-20 sm:px-6 sm:pt-28 md:pt-36">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl">
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -187,10 +187,10 @@ function About() {
             [ ABOUT ]
           </motion.p>
 
-          <div className="mt-4 font-display text-5xl sm:text-7xl md:text-8xl">
-            <WordReveal text="Rohan Patel" className="inline" />
-            <span className="text-accent">.</span>
-          </div>
+          <WordReveal
+            text="Rohan Patel."
+            className="mt-4 font-display text-5xl sm:text-7xl md:text-8xl"
+          />
 
           <Reveal delay={0.12}>
             <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
@@ -199,7 +199,7 @@ function About() {
           </Reveal>
 
           <Reveal delay={0.2}>
-            <p className="mx-auto mt-10 max-w-2xl text-xl font-light leading-[1.65] text-muted-foreground sm:text-2xl sm:leading-[1.6]">
+            <p className="mt-10 text-xl font-light leading-[1.65] text-muted-foreground sm:text-2xl sm:leading-[1.6]">
               I build and ship{" "}
               <span className="font-medium text-foreground">
                 production systems that stay reliable under pressure
@@ -213,8 +213,8 @@ function About() {
           </Reveal>
 
           <Reveal delay={0.28}>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Built at{" "}
+            <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+              I currently engineer at{" "}
               <span className="font-medium text-foreground">
                 Praalak Tech Solutions
               </span>
@@ -226,8 +226,7 @@ function About() {
               </span>
               — scientific pipelines and analysis tooling for polarization
               camera telemetry. Alongside that I have shipped freelance
-              platforms end to end, contributed to open source at Grafana,
-              Supabase, and Ollama, authored two peer-reviewed ML papers, and
+              platforms end to end, authored two peer-reviewed ML papers, and
               wrote{" "}
               <a
                 href={site.book}
@@ -242,7 +241,7 @@ function About() {
           </Reveal>
 
           <Reveal delay={0.34}>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
               The through-line is the same whether the context is a product team,
               a research lab, or a client brief: understand the real constraint,
               design the smallest honest system, and leave behind evidence —
@@ -261,19 +260,17 @@ function About() {
         />
         <div className="relative mx-auto max-w-5xl">
           <Reveal>
-            <div className="text-center">
-              <p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">
-                [ FOCUS ]
-              </p>
-              <WordReveal
-                text="How I build."
-                className="mt-3 font-display text-4xl uppercase sm:text-5xl"
-              />
-              <p className="mx-auto mt-5 max-w-2xl text-base font-light leading-relaxed text-muted-foreground sm:text-lg">
-                Four surfaces, one through-line. Watch a request become a system —
-                then ship.
-              </p>
-            </div>
+            <p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">
+              [ FOCUS ]
+            </p>
+            <WordReveal
+              text="What I do."
+              className="mt-3 font-display text-4xl uppercase sm:text-5xl"
+            />
+            <p className="mt-5 max-w-2xl text-base font-light leading-relaxed text-muted-foreground sm:text-lg">
+              Four surfaces, one through-line. Watch a request become a system —
+              then ship.
+            </p>
           </Reveal>
 
           <FocusStory />
@@ -382,7 +379,7 @@ function FocusStory() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+      <div className="divide-y divide-border border-y border-border">
         {FOCUS.map((item, i) => {
           const on = reduce || act === i;
           return (
@@ -390,80 +387,47 @@ function FocusStory() {
               key={item.title}
               type="button"
               onClick={() => setAct(i)}
-              className={`relative flex min-h-[14rem] flex-col overflow-hidden rounded-sm border bg-background p-5 text-left transition-colors sm:min-h-[16rem] sm:p-6 ${
-                on ? "border-accent" : "border-border hover:border-foreground/25"
-              }`}
+              className="block w-full py-8 text-left sm:py-10"
             >
-              {on && !reduce && (
-                <svg
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 h-full w-full text-accent"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                >
-                  <motion.rect
-                    key={`focus-run-${act}`}
-                    x="1"
-                    y="1"
-                    width="98"
-                    height="98"
-                    rx="1.2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    vectorEffect="non-scaling-stroke"
-                    pathLength={100}
-                    strokeDasharray="18 82"
-                    initial={{ strokeDashoffset: 0 }}
-                    animate={{ strokeDashoffset: -100 }}
-                    transition={{
-                      duration: ACT_MS / 1000,
-                      ease: "linear",
-                      repeat: Infinity,
-                    }}
-                  />
-                </svg>
-              )}
-
-              <div className="relative flex items-baseline justify-between gap-3">
-                <span
-                  className={`font-mono text-[11px] tracking-[0.2em] ${
-                    on ? "text-accent" : "text-muted-foreground"
-                  }`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span
-                  className={`font-mono text-[10px] uppercase tracking-[0.16em] ${
-                    on ? "text-accent" : "text-muted-foreground/50"
-                  }`}
-                >
-                  {on ? "Active" : "—"}
-                </span>
-              </div>
-
-              <h3
-                className={`relative mt-3 font-display text-xl uppercase leading-[0.95] sm:text-2xl ${
-                  on ? "text-foreground" : "text-muted-foreground"
-                }`}
+              <motion.div
+                animate={{ opacity: on ? 1 : 0.35 }}
+                transition={{ duration: 0.5, ease: EASE }}
               >
-                {item.title}
-              </h3>
-              <p
-                className={`relative mt-3 text-[15px] font-medium leading-snug sm:text-base ${
-                  on ? "text-foreground" : "text-muted-foreground"
-                }`}
-              >
-                {item.lead}
-              </p>
-              <p
-                className={`relative mt-2.5 line-clamp-4 flex-1 text-[13px] font-light leading-relaxed sm:line-clamp-5 sm:text-[14px] ${
-                  on ? "text-muted-foreground" : "text-muted-foreground/70"
-                }`}
-              >
-                {item.body}
-              </p>
+                <div className="flex items-baseline gap-4">
+                  <span
+                    className={`font-mono text-[11px] tracking-[0.2em] ${
+                      on ? "text-accent" : "text-muted-foreground"
+                    }`}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3
+                    className={`font-display text-2xl leading-[0.95] sm:text-3xl ${
+                      on ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                  >
+                    {item.title}
+                  </h3>
+                </div>
+                <AnimatePresence initial={false}>
+                  {on && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.45, ease: EASE }}
+                      className="overflow-hidden"
+                    >
+                      <p className="mt-4 max-w-2xl text-base font-medium leading-snug text-foreground sm:text-lg">
+                        {item.lead}
+                      </p>
+                      <p className="mt-3 max-w-2xl text-[15px] font-light leading-[1.75] text-muted-foreground sm:text-base">
+                        {item.body}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             </button>
           );
         })}

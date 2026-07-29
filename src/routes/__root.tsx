@@ -102,6 +102,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { Analytics } from "@vercel/analytics/react";
 import { ContactModal } from "@/components/ContactModal";
 import { useContactModal } from "@/hooks/use-contact-modal";
 import { Toaster } from "sonner";
@@ -182,6 +183,7 @@ function RootComponent() {
       </motion.div>
       <ContactModal isOpen={isOpen} onClose={close} />
       <Toaster position="bottom-right" />
+      <Analytics />
     </QueryClientProvider>
   );
 }
